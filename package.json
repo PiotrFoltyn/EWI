@@ -1,0 +1,28 @@
+{
+  "name": "ewi-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Testy automatyczne Playwright dla aplikacji EWI (PKO BP)",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:p1": "playwright test --grep @P1",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.0",
+    "@types/node": "22.19.1",
+    "dotenv": "17.2.3",
+    "eslint": "10.14.0",
+    "eslint-plugin-playwright": "2.12.2",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.2"
+  }
+}

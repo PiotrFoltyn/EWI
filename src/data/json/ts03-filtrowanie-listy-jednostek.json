@@ -1,0 +1,37 @@
+{
+  "tc10": {
+    "filtry": { "typJednostki": "KOC (departament/biuro)" },
+    "typWKolumnie": "KOC",
+    "oczekiwanaLiczbaWynikow": 443
+  },
+  "tc11": {
+    "filtry": { "pion": "PBE – Pion Bezpieczeństwa" },
+    "pionNaKarcie": "Pion Bezpieczeństwa",
+    "oczekiwanaLiczbaWynikow": 27,
+    "liczbaSprawdzanychKart": 3
+  },
+  "tc12": {
+    "filtry": { "region": "1 – regiony korporacyjne" },
+    "regionNaKarcie": "1 – regiony korporacyjne",
+    "oczekiwanaLiczbaWynikow": 96,
+    "liczbaSprawdzanychKart": 3
+  },
+  "tc13": {
+    "filtry": { "status": "Zlikwidowana" },
+    "statusWKolumnie": "Zlikwidowana"
+  },
+  "tc14": {
+    "filtry": { "typJednostki": "SJO", "region": "Z – jednostka specjalistyczna" },
+    "fragmentNazwy": "departament",
+    "typWKolumnie": "SJO",
+    "oczekiwanaLiczbaWynikow": 10
+  },
+  "tc15": {
+    "filtry": { "typJednostki": "Pion", "region": "A – wrocławski" },
+    "komunikatBrakuWynikow": "Brak jednostek dla podanych kryteriów."
+  },
+  "tc16": {
+    "filtry": { "typJednostki": "KOC (departament/biuro)", "region": "Y – jednostka centrali" },
+    "wartoscPustegoFiltra": "Wybierz"
+  }
+}

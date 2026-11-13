@@ -1,0 +1,67 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: 'Filtr tagów, np. @smoke, @P1, @TS_01 (puste = wszystkie testy)'
+        required: false
+        default: ''
+
+jobs:
+  quality:
+    name: Jakość kodu (tsc, eslint, prettier)
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Format check
+        run: npm run format:check
+
+  test:
+    name: Testy e2e
+    needs: quality
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      EWI_BASE_URL: ${{ vars.EWI_BASE_URL }}
+      EWI_ADMINISTRATOR_LOGIN: ${{ secrets.EWI_ADMINISTRATOR_LOGIN }}
+      EWI_ADMINISTRATOR_HASLO: ${{ secrets.EWI_ADMINISTRATOR_HASLO }}
+      EWI_UZYTKOWNIK_PODSTAWOWY_LOGIN: ${{ secrets.EWI_UZYTKOWNIK_PODSTAWOWY_LOGIN }}
+      EWI_UZYTKOWNIK_PODSTAWOWY_HASLO: ${{ secrets.EWI_UZYTKOWNIK_PODSTAWOWY_HASLO }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        env:
+          GREP: ${{ inputs.grep }}
+        run: npx playwright test ${GREP:+--grep "$GREP"}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30

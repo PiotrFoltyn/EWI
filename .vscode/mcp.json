@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "C:\\Windows\\System32\\cmd.exe",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    }
+  }
+}

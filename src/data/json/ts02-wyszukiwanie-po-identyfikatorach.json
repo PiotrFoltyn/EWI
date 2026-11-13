@@ -1,0 +1,19 @@
+{
+  "tc05": {
+    "mpk": "Y2D10000"
+  },
+  "tc06": {
+    "ps": "5649"
+  },
+  "tc07": {
+    "psWspoldzielony": "9163",
+    "mpkJednostek": ["Y2D10000", "Y2D19700", "YL609701"]
+  },
+  "tc08": {
+    "ozsi": "Y370"
+  },
+  "tc09": {
+    "fragmentMpk": "ZA00",
+    "minimalnaLiczbaWynikow": 2
+  }
+}

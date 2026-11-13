@@ -1,0 +1,17 @@
+{
+  "tc01": {
+    "pelnaNazwa": "DEPARTAMENT AUDYTU WEWNĘTRZNEGO JS"
+  },
+  "tc02": {
+    "fragmentNazwy": "zespół audytu",
+    "minimalnaLiczbaWynikow": 2
+  },
+  "tc03": {
+    "fraza": "ZZZ999",
+    "komunikatBrakuWynikow": "Brak jednostek dla podanych kryteriów."
+  },
+  "tc04": {
+    "mpkZlikwidowanej": "AA140P18",
+    "statusZlikwidowana": "Zlikwidowana"
+  }
+}
