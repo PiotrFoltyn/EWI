@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run typecheck)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint *)",
+      "Bash(npm run format)",
+      "Bash(npm run format:check)",
+      "Bash(npm run scenariusz *)",
+      "Bash(npm test)",
+      "Bash(npm test *)",
+      "Bash(npx playwright test *)",
+      "Bash(npx playwright show-trace *)",
+      "Bash(npx playwright show-report *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(npx prettier *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "mcp__playwright"
+    ],
+    "ask": ["Bash(git commit *)", "Bash(git push *)", "Bash(npm install *)", "Bash(npm i *)"],
+    "deny": [
+      "Read(./.env)",
+      "Edit(./.env)",
+      "Read(./playwright/.auth/**)",
+      "Bash(cat .env*)",
+      "Bash(git push --force *)"
+    ]
+  },
+  "enabledMcpjsonServers": ["playwright"],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/formatuj-po-edycji.js"]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -59,6 +59,22 @@ Wymagana konfiguracja repozytorium (Settings → Secrets and variables → Actio
 
 `.vscode/mcp.json` uruchamia serwer `@playwright/mcp` – służy do podglądu ekranów i weryfikacji lokatorów na żywej aplikacji przed pisaniem testów.
 
+## Claude Code
+
+Repozytorium jest przygotowane do pracy w Claude Code (zakładka **Code** w aplikacji Claude albo CLI `claude`).
+
+| Plik                                | Rola                                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `CLAUDE.md`                         | kontekst projektu: komendy, struktura, zasady, definicja „gotowe”                                      |
+| `.claude/skills/ewi-playwright/`    | standard pisania testów (stosowany automatycznie)                                                      |
+| `.claude/skills/nowy-scenariusz/`   | `/nowy-scenariusz TS_04` – automatyzacja scenariusza od arkusza do zielonego testu                     |
+| `.claude/agents/reviewer-testow.md` | agent code review według standardu                                                                     |
+| `.claude/settings.json`             | uprawnienia (npm/playwright bez pytania, `.env` zablokowany) i hook Prettier + ESLint po każdej edycji |
+| `.mcp.json`                         | serwer Playwright MCP do podglądu ekranów                                                              |
+| `scripts/scenariusz.mjs`            | `npm run scenariusz -- TS_04` – przypadki scenariusza z arkusza (ścieżka w `EWI_SCENARIUSZE_PLIK`)     |
+
+Konfiguracja lokalna: skopiuj `.claude/settings.local.json.example` do `.claude/settings.local.json` (dostęp do folderów Scenariusze i Documentation) i dopisz `EWI_SCENARIUSZE_PLIK` do `.env`.
+
 ## Założenia i otwarte punkty
 
 - Scenariusze są dla roli „Użytkownik podstawowy”. Do czasu założenia konta testy działają jako Administrator (`test.use({ rola: Rola.Administrator })`).

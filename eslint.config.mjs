@@ -3,7 +3,7 @@ import tseslint from 'typescript-eslint';
 import playwright from 'eslint-plugin-playwright';
 
 export default tseslint.config(
-  { ignores: ['node_modules/', 'playwright-report/', 'test-results/', 'eslint.config.mjs'] },
+  { ignores: ['node_modules/', 'playwright-report/', 'test-results/', 'eslint.config.mjs', '.claude/'] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
@@ -23,6 +23,14 @@ export default tseslint.config(
         { selector: 'enumMember', format: ['PascalCase'] },
         { selector: 'objectLiteralProperty', modifiers: ['requiresQuotes'], format: null },
       ],
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: { console: 'readonly', process: 'readonly' },
     },
   },
   {
