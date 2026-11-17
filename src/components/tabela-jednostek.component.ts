@@ -11,6 +11,17 @@ export enum KolumnaJednostki {
   Akcja = 5,
 }
 
+/** Wartości wiersza listy jednostek (identyfikatory rozdzielone z kolumny „PS / MPK / O-ZSI”). */
+export interface DaneWierszaJednostki {
+  status: string;
+  nazwaPelna: string;
+  nazwaKrotka: string;
+  typJednostki: string;
+  ps: string;
+  mpk: string;
+  ozsi: string;
+}
+
 /**
  * Tabela jednostek w Rejestrze jednostek.
  * Kolumna identyfikatorów ma format „PS / MPK / O-ZSI”, brak PS oznaczany jest „—”.
@@ -36,6 +47,31 @@ export class TabelaJednostek {
    */
   komorka(wiersz: Locator, kolumna: KolumnaJednostki): Locator {
     return wiersz.getByRole('gridcell').nth(kolumna);
+  }
+
+  /**
+   * Odczytuje wartości wiersza – do porównania z innym ekranem (np. kartą jednostki).
+   * Wywołuj dopiero, gdy lista pokazuje oczekiwany wynik (np. po `RejestrJednostekPage.wyszukajJednostke`).
+   * @param wiersz - wiersz tabeli (element `wiersze`)
+   * @returns wartości komórek wiersza
+   */
+  async daneWiersza(wiersz: Locator): Promise<DaneWierszaJednostki> {
+    const tekst = async (kolumna: KolumnaJednostki): Promise<string> =>
+      (await this.komorka(wiersz, kolumna).innerText()).trim();
+    const identyfikatory = await tekst(KolumnaJednostki.Identyfikatory);
+    const [ps, mpk, ozsi] = identyfikatory.split(' / ');
+    if (ps === undefined || mpk === undefined || ozsi === undefined) {
+      throw new Error(`Nieoczekiwany format kolumny „PS / MPK / O-ZSI”: „${identyfikatory}”`);
+    }
+    return {
+      status: await tekst(KolumnaJednostki.Status),
+      nazwaPelna: await tekst(KolumnaJednostki.NazwaPelna),
+      nazwaKrotka: await tekst(KolumnaJednostki.NazwaKrotka),
+      typJednostki: await tekst(KolumnaJednostki.TypJednostki),
+      ps,
+      mpk,
+      ozsi,
+    };
   }
 
   /**

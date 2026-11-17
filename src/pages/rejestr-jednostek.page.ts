@@ -61,12 +61,35 @@ export class RejestrJednostekPage extends BasePage {
   }
 
   /**
-   * Otwiera kartę jednostki z wiersza listy (akcja „Podgląd”).
-   * @param indeksWiersza - indeks wiersza na bieżącej stronie (od 0)
+   * Wyszukuje jednostkę po MPK i czeka, aż lista pokaże dokładnie jej wiersz.
+   * @param mpk - 8-znakowy kod MPK istniejącej jednostki
+   * @returns wiersz jednostki na liście
+   */
+  async wyszukajJednostke(mpk: string): Promise<Locator> {
+    await this.wyszukaj(mpk);
+    const wiersz = this.tabela.wierszeZMpk(mpk);
+    await expect(this.tabela.wiersze).toHaveCount(1);
+    await expect(wiersz).toHaveCount(1);
+    return wiersz;
+  }
+
+  /**
+   * Otwiera kartę jednostki o podanym MPK (wyszukanie + akcja „Podgląd”).
+   * @param mpk - 8-znakowy kod MPK istniejącej jednostki
    * @returns załadowana karta jednostki
    */
-  async otworzKarte(indeksWiersza: number): Promise<KartaJednostkiPage> {
-    await this.tabela.wiersze.nth(indeksWiersza).getByRole('link', { name: 'Podgląd' }).click();
+  async otworzKarteJednostki(mpk: string): Promise<KartaJednostkiPage> {
+    return this.otworzKarte(await this.wyszukajJednostke(mpk));
+  }
+
+  /**
+   * Otwiera kartę jednostki z wiersza listy (akcja „Podgląd”).
+   * @param wiersz - indeks wiersza na bieżącej stronie (od 0) albo lokator wiersza
+   * @returns załadowana karta jednostki
+   */
+  async otworzKarte(wiersz: number | Locator): Promise<KartaJednostkiPage> {
+    const lokatorWiersza = typeof wiersz === 'number' ? this.tabela.wiersze.nth(wiersz) : wiersz;
+    await lokatorWiersza.getByRole('link', { name: 'Podgląd' }).click();
     const karta = new KartaJednostkiPage(this.page);
     await karta.expectLoaded();
     return karta;

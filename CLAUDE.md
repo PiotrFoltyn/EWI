@@ -21,11 +21,11 @@ Stos: `@playwright/test` + TypeScript (strict, CommonJS), ESLint, Prettier.
 
 ## Struktura
 
-- `src/pages` – Page Objecty (`BasePage`, `LoginPage`, `DashboardPage`, `RejestrJednostekPage`, `KartaJednostkiPage`)
-- `src/components` – `MenuGlowne`, `TabelaJednostek`, `PanelFiltrow`
+- `src/pages` – Page Objecty (`BasePage`, `LoginPage`, `DashboardPage`, `RejestrJednostekPage`, `KartaJednostkiPage`, `ZarzadzaniePage`)
+- `src/components` – `MenuGlowne`, `TabelaJednostek`, `PanelFiltrow`, `SlownikComponent`
 - `src/fixtures` – `test` z opcją `rola`, logowaniem i `dashboardPage`
 - `src/data/json` – dane stałe scenariuszy; `src/data/types` – ich interfejsy; `src/data/tagi.ts` – tagi
-- `tests/e2e/<obszar>/tsXX-<nazwa>.spec.ts` – jeden plik = jeden scenariusz
+- `tests/e2e/tsXX-<nazwa>.spec.ts` – jeden plik = jeden scenariusz; wszystkie scenariusze płasko w `tests/e2e` (bez podfolderów obszarów)
 
 ## Zasady
 

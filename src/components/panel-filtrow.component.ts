@@ -78,6 +78,20 @@ export class PanelFiltrow {
   }
 
   /**
+   * Rozwija listę filtra, wpisuje tekst w pole „Search” i zwraca pasującą opcję (bez wybierania).
+   * Służy do sprawdzenia, czy wartość jest dostępna na liście wyboru.
+   * @param filtr - nazwa filtra
+   * @param tekst - tekst opcji dokładnie jak na liście
+   * @returns lokator widocznej opcji (pusty, gdy wartości nie ma na liście)
+   */
+  async wyszukajOpcje(filtr: FiltrRejestru, tekst: string): Promise<Locator> {
+    await this.otworz();
+    await this.pole(filtr).click();
+    await this.page.getByRole('textbox', { name: 'Search' }).filter({ visible: true }).fill(tekst);
+    return this.page.getByRole('option', { name: tekst, exact: true }).filter({ visible: true });
+  }
+
+  /**
    * Ustawia podane filtry i zatwierdza je „Zapisz zmiany”.
    * Nie czeka na wynik listy – test potwierdza wynik asercją na liczniku lub tabeli.
    * @param ustawienia - filtry do ustawienia; pominięte pozostają bez zmian

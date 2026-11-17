@@ -1,0 +1,268 @@
+- generic [ref=f1e377]:
+  - banner [ref=f1e378]:
+    - navigation "Main navigation" [ref=f1e383]:
+      - generic [ref=f1e384]: EWI
+      - menubar [ref=f1e388]:
+        - menuitem "Lista zadań" [ref=f1e389] [cursor=pointer]
+        - menuitem "Rejestr jednostek" [ref=f1e390] [cursor=pointer]
+        - menuitem "Raporty" [ref=f1e391] [cursor=pointer]
+        - menuitem "Zarządzanie" [ref=f1e392] [cursor=pointer]
+      - generic [ref=f1e395]:
+        - generic [ref=f1e396]:
+          - img "user initials, E" [ref=f1e398]:
+            - generic [ref=f1e399]: E
+          - generic [ref=f1e400]:
+            - generic [ref=f1e401]: EWI_Admin
+            - generic [ref=f1e402]: Administrator (BRS)
+        - link " Wyloguj" [ref=f1e404] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f1e405]: 
+          - generic [ref=f1e406]: Wyloguj
+  - generic [ref=f1e407]:
+    - main [ref=f1e408]:
+      - generic [ref=f1e411]:
+        - link " Wróć do wyników wyszukiwania" [ref=f1e413] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=f1e414]: 
+          - generic [ref=f1e415]: Wróć do wyników wyszukiwania
+        - generic [ref=f1e417]:
+          - generic [ref=f1e418]: DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ
+          - generic [ref=f1e419]:
+            - generic [ref=f1e420]: KOC
+            - generic [ref=f1e423]: Aktywna
+        - generic [ref=f1e430]:
+          - generic [ref=f1e432]:
+            - generic [ref=f1e437]:
+              - generic [ref=f1e438]: Dane jednostki
+              - generic [ref=f1e440]:
+                - generic [ref=f1e442]:
+                  - generic [ref=f1e443]:
+                    - generic [ref=f1e444]: Nazwa pełna
+                    - generic [ref=f1e445]: DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ
+                  - generic [ref=f1e446]:
+                    - generic [ref=f1e447]: Nazwa długa (40 zn.)
+                    - generic [ref=f1e448]: Dep Bankowości Zagranicznej i Instytucjo
+                  - generic [ref=f1e449]:
+                    - generic [ref=f1e450]: Data utworzenia
+                    - generic [ref=f1e451]: 13.11.2026
+                - generic [ref=f1e453]:
+                  - generic [ref=f1e454]:
+                    - generic [ref=f1e455]: Typ jednostki
+                    - generic [ref=f1e456]: KOC (departament/biuro)
+                  - generic [ref=f1e457]:
+                    - generic [ref=f1e458]: Nazwa krótka (skrót)
+                    - generic [ref=f1e459]: DBZ
+                  - generic [ref=f1e460]:
+                    - generic [ref=f1e461]: Region
+                    - generic [ref=f1e462]: Y – jednostka centrali
+              - generic [ref=f1e463]:
+                - generic [ref=f1e464]: Adres siedziby
+                - generic [ref=f1e465]: ul. Świętokrzyska 36, 00-116 Warszawa
+            - generic [ref=f1e470]:
+              - generic [ref=f1e471]: Numery identyfikacyjne
+              - generic [ref=f1e473]:
+                - generic [ref=f1e475]:
+                  - generic [ref=f1e476]:
+                    - generic [ref=f1e479]:
+                      - generic [ref=f1e480]: MPK główny
+                      - 'button "Objaśnienie: MPK główny" [ref=f1e483] [cursor=pointer]':
+                        - 'generic "Objaśnienie: MPK główny" [ref=f1e484]': 
+                    - generic [ref=f1e485]: Y2D10000
+                  - generic [ref=f1e486]:
+                    - generic [ref=f1e489]:
+                      - generic [ref=f1e490]: PS
+                      - 'button "Objaśnienie: PS" [ref=f1e493] [cursor=pointer]':
+                        - 'generic "Objaśnienie: PS" [ref=f1e494]': 
+                    - generic [ref=f1e495]: "9163"
+                  - generic [ref=f1e496]:
+                    - generic [ref=f1e499]:
+                      - generic [ref=f1e500]: O-ZSI
+                      - 'button "Objaśnienie: O-ZSI" [ref=f1e503] [cursor=pointer]':
+                        - 'generic "Objaśnienie: O-ZSI" [ref=f1e504]': 
+                    - generic [ref=f1e505]: Y370
+                - generic [ref=f1e507]:
+                  - generic [ref=f1e508]:
+                    - generic [ref=f1e509]: Statystyczna
+                    - generic [ref=f1e510]: Y2D19700
+                  - generic [ref=f1e511]:
+                    - generic [ref=f1e512]: Numer rozliczeniowy
+                    - generic [ref=f1e513]: "10200003"
+                  - generic [ref=f1e514]:
+                    - generic [ref=f1e517]:
+                      - generic [ref=f1e518]: Region O-ZSI
+                      - 'button "Objaśnienie: Region O-ZSI" [ref=f1e521] [cursor=pointer]':
+                        - 'generic "Objaśnienie: Region O-ZSI" [ref=f1e522]': 
+                    - generic [ref=f1e523]: Y001
+          - generic [ref=f1e526]:
+            - generic [ref=f1e527]: Umiejscowienie i struktura jednostki
+            - generic [ref=f1e529]:
+              - link "Obszar Bankowości Międzynarodowej" [ref=f1e531] [cursor=pointer]:
+                - /url: "#"
+              - generic [ref=f1e532]:
+                - generic [ref=f1e533]: ›
+                - link "Pion Instytucjonalnej Bankowości Zagranicznej" [ref=f1e534] [cursor=pointer]:
+                  - /url: "#"
+              - generic [ref=f1e535]:
+                - generic [ref=f1e536]: ›
+                - generic [ref=f1e537]: DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ
+            - generic [ref=f1e538]:
+              - grid [ref=f1e539]:
+                - rowgroup [ref=f1e540]:
+                  - row [ref=f1e541]:
+                    - 'columnheader "MPK Objaśnienie: MPK" [ref=f1e542]':
+                      - generic [ref=f1e544]:
+                        - generic [ref=f1e545]: MPK
+                        - 'button "Objaśnienie: MPK" [ref=f1e548] [cursor=pointer]':
+                          - 'generic "Objaśnienie: MPK" [ref=f1e549]': 
+                    - 'columnheader "JO2 Objaśnienie: JO2" [ref=f1e550]':
+                      - generic [ref=f1e552]:
+                        - generic [ref=f1e553]: JO2
+                        - 'button "Objaśnienie: JO2" [ref=f1e556] [cursor=pointer]':
+                          - 'generic "Objaśnienie: JO2" [ref=f1e557]': 
+                    - columnheader "Nazwa pełna" [ref=f1e558]
+                    - columnheader "Nazwa krótka" [ref=f1e559]
+                    - 'columnheader "Rodzaj MPK Objaśnienie: Rodzaj MPK" [ref=f1e560]':
+                      - generic [ref=f1e562]:
+                        - generic [ref=f1e563]: Rodzaj MPK
+                        - 'button "Objaśnienie: Rodzaj MPK" [ref=f1e566] [cursor=pointer]':
+                          - 'generic "Objaśnienie: Rodzaj MPK" [ref=f1e567]': 
+                    - 'columnheader "O-ZSI Objaśnienie: O-ZSI" [ref=f1e568]':
+                      - generic [ref=f1e570]:
+                        - generic [ref=f1e571]: O-ZSI
+                        - 'button "Objaśnienie: O-ZSI" [ref=f1e574] [cursor=pointer]':
+                          - 'generic "Objaśnienie: O-ZSI" [ref=f1e575]': 
+                    - 'columnheader "PS Objaśnienie: PS" [ref=f1e576]':
+                      - generic [ref=f1e578]:
+                        - generic [ref=f1e579]: PS
+                        - 'button "Objaśnienie: PS" [ref=f1e582] [cursor=pointer]':
+                          - 'generic "Objaśnienie: PS" [ref=f1e583]': 
+                - rowgroup [ref=f1e584]:
+                  - row [ref=f1e585]:
+                    - gridcell "Y2D10000" [ref=f1e586]
+                    - gridcell "00" [ref=f1e587]
+                    - gridcell "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ" [ref=f1e588]
+                    - gridcell "DBZ" [ref=f1e589]
+                    - gridcell "departament/biuro" [ref=f1e590]
+                    - gridcell "Y370" [ref=f1e591]
+                    - gridcell "9163" [ref=f1e592]
+                  - row [ref=f1e593]:
+                    - gridcell "Y2D19700" [ref=f1e594]
+                    - gridcell "97" [ref=f1e595]
+                    - gridcell [ref=f1e596]:
+                      - link "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ" [ref=f1e597] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DBZ js" [ref=f1e598]
+                    - gridcell "departament/biuro" [ref=f1e599]
+                    - gridcell "Y371" [ref=f1e600]
+                    - gridcell "9163" [ref=f1e601]
+                  - row [ref=f1e602]:
+                    - gridcell "Y2D20000" [ref=f1e603]
+                    - gridcell "00" [ref=f1e604]
+                    - gridcell [ref=f1e605]:
+                      - link "Departament Zarządzania i Rozwoju Korporacyjnej Bankowości Międzynarodowej" [ref=f1e606] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZM" [ref=f1e607]
+                    - gridcell "departament/biuro" [ref=f1e608]
+                    - gridcell "Y414" [ref=f1e609]
+                    - gridcell "9181" [ref=f1e610]
+                  - row [ref=f1e611]:
+                    - gridcell "Y2D29700" [ref=f1e612]
+                    - gridcell "97" [ref=f1e613]
+                    - gridcell [ref=f1e614]:
+                      - link "Departament Rozwoju i Zarządzania Korporacyjnej Bankowości Międzynarodowej JS" [ref=f1e615] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZM" [ref=f1e616]
+                    - gridcell "departament/biuro" [ref=f1e617]
+                    - gridcell "Y415" [ref=f1e618]
+                    - gridcell "9181" [ref=f1e619]
+                  - row [ref=f1e620]:
+                    - gridcell "Y2D29701" [ref=f1e621]
+                    - gridcell "97" [ref=f1e622]
+                    - gridcell [ref=f1e623]:
+                      - link "Departament Rozwoju i Zarządzania Korporacyjnej Bankowości Międzynarodowej (N)" [ref=f1e624] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZM (N)" [ref=f1e625]
+                    - gridcell "stanowisko organizacyjne N" [ref=f1e626]
+                    - gridcell "Y449" [ref=f1e627]
+                    - gridcell "9181" [ref=f1e628]
+                  - row [ref=f1e629]:
+                    - gridcell "Y2D30000" [ref=f1e630]
+                    - gridcell "00" [ref=f1e631]
+                    - gridcell [ref=f1e632]:
+                      - link "Departament Zagranicznej Bankowości Korporacyjnej" [ref=f1e633] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZK" [ref=f1e634]
+                    - gridcell "departament/biuro" [ref=f1e635]
+                    - gridcell "Y416" [ref=f1e636]
+                    - gridcell "9184" [ref=f1e637]
+                  - row [ref=f1e638]:
+                    - gridcell "Y2D39700" [ref=f1e639]
+                    - gridcell "97" [ref=f1e640]
+                    - gridcell [ref=f1e641]:
+                      - link "Departament Zagranicznej Bankowości Korporacyjnej JS" [ref=f1e642] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZK" [ref=f1e643]
+                    - gridcell "departament/biuro" [ref=f1e644]
+                    - gridcell "Y417" [ref=f1e645]
+                    - gridcell "9184" [ref=f1e646]
+                  - row [ref=f1e647]:
+                    - gridcell "Y2D39701" [ref=f1e648]
+                    - gridcell "97" [ref=f1e649]
+                    - gridcell [ref=f1e650]:
+                      - link "Departament Zagranicznej Bankowości Korporacyjnej (N)" [ref=f1e651] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZK (N)" [ref=f1e652]
+                    - gridcell "stanowisko organizacyjne N" [ref=f1e653]
+                    - gridcell "Y450" [ref=f1e654]
+                    - gridcell "9184" [ref=f1e655]
+                  - row [ref=f1e656]:
+                    - gridcell "Y2D40000" [ref=f1e657]
+                    - gridcell "00" [ref=f1e658]
+                    - gridcell [ref=f1e659]:
+                      - link "Departament Zagranicznej Bankowości Korporacyjnej - techniczny" [ref=f1e660] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZK- techniczny" [ref=f1e661]
+                    - gridcell "jednostka techniczna" [ref=f1e662]
+                    - gridcell "Y428" [ref=f1e663]
+                    - gridcell "9184" [ref=f1e664]
+                  - row [ref=f1e665]:
+                    - gridcell "Y2D49700" [ref=f1e666]
+                    - gridcell "97" [ref=f1e667]
+                    - gridcell [ref=f1e668]:
+                      - link "Departament Zagranicznej Bankowości Korporacyjnej- techniczny JS" [ref=f1e669] [cursor=pointer]:
+                        - /url: "#"
+                    - gridcell "DZK - techniczny" [ref=f1e670]
+                    - gridcell "jednostka techniczna" [ref=f1e671]
+                    - gridcell "Y429" [ref=f1e672]
+                    - gridcell "9184" [ref=f1e673]
+              - generic [ref=f1e674]:
+                - generic [ref=f1e675]: 1–10 z 15
+                - navigation "Pagination" [ref=f1e679]:
+                  - button "go to previous page" [disabled]:
+                    - generic: 
+                  - generic [ref=f1e680]:
+                    - button "page 1":
+                      - generic: "1"
+                    - group [ref=f1e681]:
+                      - button "go to page 2" [ref=f1e682] [cursor=pointer]:
+                        - generic [ref=f1e683]: "2"
+                  - button "go to next page" [ref=f1e684] [cursor=pointer]:
+                    - generic [ref=f1e685]: 
+          - generic [ref=f1e689]:
+            - generic [ref=f1e690]: Historia zmian
+            - grid [ref=f1e694]:
+              - rowgroup [ref=f1e695]:
+                - row [ref=f1e696]:
+                  - columnheader "Data zmiany" [ref=f1e697]
+                  - columnheader "Data obowiązywania" [ref=f1e698]
+                  - columnheader "Rodzaj zmiany" [ref=f1e699]
+                  - columnheader "Podstawa / zgłoszenie" [ref=f1e700]
+                  - columnheader "Wprowadził(a)" [ref=f1e701]
+              - rowgroup [ref=f1e702]:
+                - row [ref=f1e703]:
+                  - gridcell "13.11.2026, 12:05" [ref=f1e704]
+                  - gridcell "13.11.2026" [ref=f1e705]
+                  - gridcell "Utworzenie" [ref=f1e706]
+                  - gridcell "Import – partia 72" [ref=f1e707]
+                  - gridcell "oskarherczyk" [ref=f1e708]
+    - contentinfo

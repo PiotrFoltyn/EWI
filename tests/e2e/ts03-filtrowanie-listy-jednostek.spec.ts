@@ -1,11 +1,11 @@
-import { expect, test } from '../../../src/fixtures';
-import type { FiltrRejestru } from '../../../src/components/panel-filtrow.component';
-import { KolumnaJednostki } from '../../../src/components/tabela-jednostek.component';
-import * as ts03Dane from '../../../src/data/json/ts03-filtrowanie-listy-jednostek.json';
-import { Rola } from '../../../src/data/rola';
-import { TAGI } from '../../../src/data/tagi';
-import type { DaneTs03 } from '../../../src/data/types/rejestr-jednostek.types';
-import { wzorzecLacznejLiczbyWynikow, zawieraBezWielkosciLiter } from '../../../src/utils/wzorce';
+import { expect, test } from '../../src/fixtures';
+import type { FiltrRejestru } from '../../src/components/panel-filtrow.component';
+import { KolumnaJednostki } from '../../src/components/tabela-jednostek.component';
+import * as ts03Dane from '../../src/data/json/ts03-filtrowanie-listy-jednostek.json';
+import { Rola } from '../../src/data/rola';
+import { TAGI } from '../../src/data/tagi';
+import type { DaneTs03 } from '../../src/data/types/rejestr-jednostek.types';
+import { wzorzecLacznejLiczbyWynikow, zawieraBezWielkosciLiter } from '../../src/utils/wzorce';
 
 const dane: DaneTs03 = ts03Dane;
 
@@ -127,12 +127,7 @@ test.describe(
           TAGI.warstwa.e2e,
           TAGI.kwalifikacja.regresja,
           '@KO-16.3',
-        ],
-        annotation: {
-          type: 'założenie',
-          description:
-            'K-05 / P-05: aplikacja nie ma przełącznika „tylko zlikwidowane” – realizuje go filtr Status = „Zlikwidowana”.',
-        },
+        ]
       },
       async ({ dashboardPage }) => {
         // Arrange
@@ -184,11 +179,7 @@ test.describe(
     test(
       'TC-15 Kombinacja filtrów bez wyników',
       {
-        tag: ['@TC-15', TAGI.priorytet.niski, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e],
-        annotation: {
-          type: 'założenie',
-          description: 'P-04: treść komunikatu przyjęta z aplikacji (dev, 12.11.2026).',
-        },
+        tag: ['@TC-15', TAGI.priorytet.niski, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e]
       },
       async ({ dashboardPage }) => {
         // Arrange
@@ -208,8 +199,7 @@ test.describe(
     test(
       'TC-16 Wyczyszczenie filtrów',
       {
-        tag: ['@TC-16', TAGI.priorytet.niski, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e],
-        annotation: { type: 'założenie', description: 'P-02: akcja „Wyczyść filtry” w panelu filtrów.' },
+        tag: ['@TC-16', TAGI.priorytet.niski, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e]
       },
       async ({ dashboardPage }) => {
         // Arrange

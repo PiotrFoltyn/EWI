@@ -1,10 +1,10 @@
-import { expect, test } from '../../../src/fixtures';
-import { KolumnaJednostki } from '../../../src/components/tabela-jednostek.component';
-import * as ts01Dane from '../../../src/data/json/ts01-wyszukiwanie-po-nazwie.json';
-import { Rola } from '../../../src/data/rola';
-import { TAGI } from '../../../src/data/tagi';
-import type { DaneTs01 } from '../../../src/data/types/rejestr-jednostek.types';
-import { zawieraBezWielkosciLiter } from '../../../src/utils/wzorce';
+import { expect, test } from '../../src/fixtures';
+import { KolumnaJednostki } from '../../src/components/tabela-jednostek.component';
+import * as ts01Dane from '../../src/data/json/ts01-wyszukiwanie-po-nazwie.json';
+import { Rola } from '../../src/data/rola';
+import { TAGI } from '../../src/data/tagi';
+import type { DaneTs01 } from '../../src/data/types/rejestr-jednostek.types';
+import { zawieraBezWielkosciLiter } from '../../src/utils/wzorce';
 
 const dane: DaneTs01 = ts01Dane;
 
@@ -89,11 +89,7 @@ test.describe(
     test(
       'TC-03 Wyszukiwanie frazy bez wyników',
       {
-        tag: ['@TC-03', TAGI.priorytet.sredni, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e],
-        annotation: {
-          type: 'założenie',
-          description: 'P-04: treść komunikatu przyjęta z aplikacji (środowisko dev, 12.11.2026).',
-        },
+        tag: ['@TC-03', TAGI.priorytet.sredni, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e]
       },
       async ({ dashboardPage }) => {
         // Arrange

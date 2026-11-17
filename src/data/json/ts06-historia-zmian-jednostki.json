@@ -1,0 +1,16 @@
+{
+  "kolumnyHistorii": ["Data zmiany", "Data obowiązywania", "Rodzaj zmiany", "Podstawa / zgłoszenie", "Wprowadził(a)"],
+  "tc27": {
+    "mpk": "",
+    "minimalnaLiczbaZmian": 2
+  },
+  "tc28": {
+    "mpk": ""
+  },
+  "tc29": {
+    "mpk": "A1710P03"
+  },
+  "tc30": {
+    "mpk": "Y2D10000"
+  }
+}

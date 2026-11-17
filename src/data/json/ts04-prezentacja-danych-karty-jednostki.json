@@ -1,0 +1,128 @@
+{
+  "wartoscPustegoPola": "Nie występuje",
+  "tc17": {
+    "mpk": "Y2D10000",
+    "ps": "9163",
+    "ozsi": "Y370"
+  },
+  "tc18": {
+    "mpk": "Y2D10000",
+    "nazwa": "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ",
+    "typWNaglowku": "KOC",
+    "status": "Aktywna",
+    "pola": [
+      {
+        "etykieta": "Nazwa pełna",
+        "wartosc": "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ"
+      },
+      {
+        "etykieta": "Nazwa długa (40 zn.)",
+        "wartosc": "Dep Bankowości Zagranicznej i Instytucjo"
+      },
+      {
+        "etykieta": "Nazwa krótka (skrót)",
+        "wartosc": "DBZ"
+      },
+      {
+        "etykieta": "Typ jednostki",
+        "wartosc": "KOC (departament/biuro)"
+      },
+      {
+        "etykieta": "Region",
+        "wartosc": "Y – jednostka centrali"
+      },
+      {
+        "etykieta": "Adres siedziby",
+        "wartosc": "ul. Świętokrzyska 36, 00-116 Warszawa"
+      },
+      {
+        "etykieta": "Data utworzenia",
+        "wartosc": "13.11.2026"
+      },
+      {
+        "etykieta": "MPK główny",
+        "wartosc": "Y2D10000"
+      },
+      {
+        "etykieta": "PS",
+        "wartosc": "9163"
+      },
+      {
+        "etykieta": "O-ZSI",
+        "wartosc": "Y370"
+      },
+      {
+        "etykieta": "Statystyczna",
+        "wartosc": "Y2D19700"
+      },
+      {
+        "etykieta": "Numer rozliczeniowy",
+        "wartosc": "10200003"
+      },
+      {
+        "etykieta": "Region O-ZSI",
+        "wartosc": "Y001"
+      },
+      {
+        "etykieta": "NIP",
+        "wartosc": "Nie dotyczy"
+      },
+      {
+        "etykieta": "PID / CIF",
+        "wartosc": "Nie dotyczy"
+      }
+    ],
+    "struktura": ["Obszar Bankowości Międzynarodowej", "Pion Instytucjonalnej Bankowości Zagranicznej"]
+  },
+  "tc19": {
+    "mpk": "A1710P03",
+    "polaObowiazkowe": [
+      {
+        "etykieta": "Nazwa pełna",
+        "wartosc": "ACCESS CAPITAL SPÓŁKA JAWNA DOMINIK ŁAZAREWICZ TOMASZ HRYNIUK"
+      },
+      {
+        "etykieta": "Typ jednostki",
+        "wartosc": "Pośrednik"
+      },
+      {
+        "etykieta": "Region",
+        "wartosc": "A – wrocławski"
+      },
+      {
+        "etykieta": "MPK główny",
+        "wartosc": "A1710P03"
+      },
+      {
+        "etykieta": "O-ZSI",
+        "wartosc": "AG24"
+      }
+    ],
+    "polaPuste": ["PS", "Statystyczna"]
+  },
+  "tc20": {
+    "aktywna": {
+      "mpk": "Y2D10000",
+      "typWNaglowku": "KOC",
+      "status": "Aktywna",
+      "dataUtworzenia": "13.11.2026"
+    },
+    "zlikwidowana": {
+      "mpk": "AA140P18",
+      "typWNaglowku": "Pośrednik",
+      "status": "Zlikwidowana",
+      "dataUtworzenia": "13.11.2026",
+      "dataLikwidacji": "24.12.2018"
+    }
+  },
+  "tc21": {
+    "mpkJednostek": ["Y2D10000", "A1710P03", "AA140P18"]
+  },
+  "tc22": {
+    "mpkKoc": "Y2D10000",
+    "mpkStatystycznej": "Y2D19700",
+    "jo2Statystycznej": "97",
+    "statusStatystycznej": "Aktywna"
+  },
+  "wartoscPustegoPolaNaLiscie": "—"
+}

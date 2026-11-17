@@ -1,8 +1,8 @@
-import { expect, test } from '../../../src/fixtures';
-import * as ts02Dane from '../../../src/data/json/ts02-wyszukiwanie-po-identyfikatorach.json';
-import { Rola } from '../../../src/data/rola';
-import { TAGI } from '../../../src/data/tagi';
-import type { DaneTs02 } from '../../../src/data/types/rejestr-jednostek.types';
+import { expect, test } from '../../src/fixtures';
+import * as ts02Dane from '../../src/data/json/ts02-wyszukiwanie-po-identyfikatorach.json';
+import { Rola } from '../../src/data/rola';
+import { TAGI } from '../../src/data/tagi';
+import type { DaneTs02 } from '../../src/data/types/rejestr-jednostek.types';
 
 const dane: DaneTs02 = ts02Dane;
 
@@ -13,12 +13,7 @@ test.use({ rola: Rola.Administrator });
 test.describe(
   'TS_02 – Wyszukiwanie jednostek po identyfikatorach MPK, PS i O-ZSI',
   {
-    tag: ['@TS_02', '@KO-17.1'],
-    annotation: {
-      type: 'założenie',
-      description:
-        'Scenariusz dla roli „Użytkownik podstawowy” – uruchamiany jako Administrator do czasu udostępnienia konta (Rejestr jednostek jest wspólny dla ról).',
-    },
+    tag: ['@TS_02', '@KO-17.1']
   },
   () => {
     test(

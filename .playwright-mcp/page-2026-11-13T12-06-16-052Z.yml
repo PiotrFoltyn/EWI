@@ -1,0 +1,136 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e7]:
+    - banner [ref=f1e8]:
+      - navigation "Main navigation" [ref=f1e13]:
+        - generic [ref=f1e14]: EWI
+        - menubar [ref=f1e18]:
+          - menuitem "Lista zadań" [ref=f1e19] [cursor=pointer]
+          - menuitem "Rejestr jednostek" [ref=f1e20] [cursor=pointer]
+          - menuitem "Raporty" [ref=f1e21] [cursor=pointer]
+          - menuitem "Zarządzanie" [ref=f1e22] [cursor=pointer]
+        - generic [ref=f1e25]:
+          - generic [ref=f1e26]:
+            - img "user initials, E" [ref=f1e28]:
+              - generic [ref=f1e29]: E
+            - generic [ref=f1e30]:
+              - generic [ref=f1e31]: EWI_Admin
+              - generic [ref=f1e32]: Administrator (BRS)
+          - link " Wyloguj" [ref=f1e34] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=f1e35]: 
+            - generic [ref=f1e36]: Wyloguj
+    - generic [ref=f1e37]:
+      - main [ref=f1e38]:
+        - generic [ref=f1e39]: Rejestr jednostek
+        - generic [ref=f1e44]:
+          - generic [ref=f1e46]:
+            - generic [ref=f1e49]:
+              - generic [ref=f1e50]: 
+              - searchbox "Wyszukaj jednostkę" [active] [ref=f1e54]: Y2D10000
+            - link "" [ref=f1e317] [cursor=pointer]:
+              - /url: "#"
+            - button "Wyszukaj jednostkę" [ref=f1e56] [cursor=pointer]
+          - generic [ref=f1e57]:
+            - generic [ref=f1e58]: Wyniki wyszukiwania
+            - link "Filtry" [ref=f1e59] [cursor=pointer]:
+              - /url: "#"
+          - grid [ref=f1e320]:
+            - rowgroup [ref=f1e321]:
+              - row [ref=f1e322]:
+                - columnheader "Status" [ref=f1e323]
+                - columnheader "Nazwa pełna" [ref=f1e324]
+                - columnheader "Nazwa krótka" [ref=f1e325]
+                - columnheader "Typ jednostki" [ref=f1e326]
+                - 'columnheader "PS / MPK / O-ZSI  Objaśnienie: PS / MPK / O-ZSI" [ref=f1e327]':
+                  - link "PS / MPK / O-ZSI " [ref=f1e328] [cursor=pointer]:
+                    - /url: "#"
+                    - generic [ref=f1e329]: PS / MPK / O-ZSI
+                    - generic [ref=f1e330]: 
+                  - 'button "Objaśnienie: PS / MPK / O-ZSI" [ref=f1e336] [cursor=pointer]':
+                    - 'generic "Objaśnienie: PS / MPK / O-ZSI" [ref=f1e337]': 
+                - columnheader "Akcja" [ref=f1e338]
+            - rowgroup [ref=f1e339]:
+              - row [ref=f1e340]:
+                - gridcell "Aktywna" [ref=f1e341]
+                - gridcell [ref=f1e347]:
+                  - link "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ" [ref=f1e348] [cursor=pointer]:
+                    - /url: "#"
+                - gridcell "DBZ" [ref=f1e349]
+                - gridcell "KOC" [ref=f1e350]
+                - gridcell "9163 / Y2D10000 / Y370" [ref=f1e351]
+                - gridcell [ref=f1e352]:
+                  - link "Podgląd" [ref=f1e353] [cursor=pointer]:
+                    - /url: "#"
+          - generic [ref=f1e229]:
+            - generic [ref=f1e230]: 1–1 z 1
+            - generic:
+              - generic:
+                - navigation "Pagination":
+                  - generic:
+                    - group
+          - complementary [ref=f1e250]:
+            - generic [ref=f1e252]:
+              - generic [ref=f1e253]: Filtry
+              - link [ref=f1e255] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=f1e256]: 
+            - generic [ref=f1e258]:
+              - generic [ref=f1e259]:
+                - generic [ref=f1e260]: Ilość wierszy na stronie
+                - spinbutton [ref=f1e262]: "10"
+              - generic [ref=f1e263]:
+                - generic [ref=f1e264]: Status
+                - generic [ref=f1e266]:
+                  - combobox [ref=f1e354]:
+                    - generic [ref=f1e355] [cursor=pointer]:
+                      - generic [ref=f1e356]: Wybierz
+                      - text:  
+                  - status [ref=f1e357]
+                  - text: ⚠
+              - generic [ref=f1e271]:
+                - generic [ref=f1e272]: Typ jednostki
+                - generic [ref=f1e274]:
+                  - combobox [ref=f1e358]:
+                    - generic [ref=f1e359] [cursor=pointer]:
+                      - generic [ref=f1e360]: Wybierz
+                      - text:  
+                  - status [ref=f1e361]
+                  - text: ⚠
+              - generic [ref=f1e279]:
+                - generic [ref=f1e280]: Region
+                - generic [ref=f1e282]:
+                  - combobox [ref=f1e362]:
+                    - generic [ref=f1e363] [cursor=pointer]:
+                      - generic [ref=f1e364]: Wybierz
+                      - text:  
+                  - status [ref=f1e365]
+                  - text: ⚠
+              - generic [ref=f1e287]:
+                - generic [ref=f1e290]:
+                  - generic [ref=f1e291]: Rodzaj MPK
+                  - button [ref=f1e294] [cursor=pointer]:
+                    - generic [ref=f1e295]: 
+                - generic [ref=f1e297]:
+                  - combobox [ref=f1e366]:
+                    - generic [ref=f1e367] [cursor=pointer]:
+                      - generic [ref=f1e368]: Wybierz
+                      - text:  
+                  - status [ref=f1e369]
+                  - text: ⚠
+              - generic [ref=f1e302]:
+                - generic [ref=f1e303]: Pion
+                - generic [ref=f1e305]:
+                  - combobox [ref=f1e370]:
+                    - generic [ref=f1e371] [cursor=pointer]:
+                      - generic [ref=f1e372]: Wybierz
+                      - text:  
+                  - status [ref=f1e373]
+                  - text: ⚠
+              - generic [ref=f1e310]:
+                - link [ref=f1e311] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=f1e312]: 
+                  - generic [ref=f1e313]: Wyczyść filtry
+                - button [ref=f1e315] [cursor=pointer]: Zapisz zmiany
+      - contentinfo
+  - text:     

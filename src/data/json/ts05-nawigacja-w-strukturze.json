@@ -1,0 +1,19 @@
+{
+  "tc23": {
+    "mpkNadrzednej": "Y4D00300",
+    "nazwaPodrzednej": "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ",
+    "mpkPodrzednej": "Y2D10000"
+  },
+  "tc24": {
+    "mpkNadrzednej": "Y4D00300",
+    "mpkWTabeli": ["Y0AD0000", "Y2D10000", "Y4D00300"]
+  },
+  "tc25": {
+    "mpkPodrzednej": "Y2D10000",
+    "nazwaNadrzednej": "Pion Instytucjonalnej Bankowości Zagranicznej",
+    "mpkNadrzednej": "Y4D00300"
+  },
+  "tc26": {
+    "mpk": "A1710P03"
+  }
+}

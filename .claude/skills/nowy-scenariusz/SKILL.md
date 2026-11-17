@@ -27,7 +27,7 @@ Stosuj skill **ewi-playwright** na każdym kroku.
 
 1. Page Objecty / komponenty (JSDoc, `expectLoaded()` z `poPrzejsciuEkranu()`).
 2. `src/data/types` – interfejs `DaneTsXX`; `src/data/json/tsXX-<nazwa>.json` – dane stałe.
-3. `tests/e2e/<obszar>/tsXX-<nazwa>.spec.ts` – describe = TS, test = TC, AAA komentarzami, komplet tagów, adnotacje założeń.
+3. `tests/e2e/tsXX-<nazwa>.spec.ts` (płasko, bez podfolderów) – describe = TS, test = TC, AAA komentarzami, komplet tagów, adnotacje założeń.
 
 ## 4. Weryfikacja (do skutku)
 
