@@ -89,7 +89,7 @@ test.describe(
     test(
       'TC-03 Wyszukiwanie frazy bez wyników',
       {
-        tag: ['@TC-03', TAGI.priorytet.sredni, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e]
+        tag: ['@TC-03', TAGI.priorytet.sredni, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e],
       },
       async ({ dashboardPage }) => {
         // Arrange

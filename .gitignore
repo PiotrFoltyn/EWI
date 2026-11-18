@@ -1,9 +1,36 @@
+# Zależności
 node_modules/
+
+# Dane logowania i konfiguracja lokalna (wzór: .env.example)
 .env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# Sesje ról zapisywane przez fixture sesjaRoli
 playwright/.auth/
+
+# Wyniki uruchomień Playwright (w tym pobrane raporty TS_10 / TS_11 – testInfo.outputPath)
 test-results/
 playwright-report/
 blob-report/
-.claude/settings.local.json
+playwright/.cache/
 
+# Playwright MCP – snapshoty, zrzuty ekranu i logi konsoli z rozpoznania ekranów
 .playwright-mcp/
+
+# Kompilacja TypeScript
+*.tsbuildinfo
+
+# Logi
+*.log
+npm-debug.log*
+
+# Pliki tymczasowe Office (np. otwarte arkusze scenariuszy / wzorce plików)
+~$*
+
+# Pliki systemowe i edytorów (.vscode/ zostaje – zawiera wspólne mcp.json)
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/

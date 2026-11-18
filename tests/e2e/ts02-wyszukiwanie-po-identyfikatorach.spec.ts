@@ -13,7 +13,7 @@ test.use({ rola: Rola.Administrator });
 test.describe(
   'TS_02 – Wyszukiwanie jednostek po identyfikatorach MPK, PS i O-ZSI',
   {
-    tag: ['@TS_02', '@KO-17.1']
+    tag: ['@TS_02', '@KO-17.1'],
   },
   () => {
     test(

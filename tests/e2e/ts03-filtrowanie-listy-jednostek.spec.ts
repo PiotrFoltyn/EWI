@@ -127,7 +127,7 @@ test.describe(
           TAGI.warstwa.e2e,
           TAGI.kwalifikacja.regresja,
           '@KO-16.3',
-        ]
+        ],
       },
       async ({ dashboardPage }) => {
         // Arrange
@@ -179,7 +179,7 @@ test.describe(
     test(
       'TC-15 Kombinacja filtrów bez wyników',
       {
-        tag: ['@TC-15', TAGI.priorytet.niski, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e]
+        tag: ['@TC-15', TAGI.priorytet.niski, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e],
       },
       async ({ dashboardPage }) => {
         // Arrange
@@ -199,7 +199,7 @@ test.describe(
     test(
       'TC-16 Wyczyszczenie filtrów',
       {
-        tag: ['@TC-16', TAGI.priorytet.niski, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e]
+        tag: ['@TC-16', TAGI.priorytet.niski, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e],
       },
       async ({ dashboardPage }) => {
         // Arrange

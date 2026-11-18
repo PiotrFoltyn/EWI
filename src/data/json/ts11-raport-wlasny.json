@@ -1,0 +1,36 @@
+{
+  "wierszNaglowkow": 3,
+  "kolumny": {
+    "nazwa": "NAZWA",
+    "ps": "Nr PS",
+    "mpk": "Kod jednostki MPK",
+    "ozsi": "Identyfikator Jednostki O-ZSI",
+    "dataObowiazywania": "Data obowiązywania od"
+  },
+  "okresZmian": {
+    "od": "2026-11-13"
+  },
+  "tc57": {
+    "nazwa": "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ"
+  },
+  "tc58": {
+    "ps": "9163"
+  },
+  "tc59": {
+    "mpk": "Y2D10000"
+  },
+  "tc60": {
+    "ozsi": "Y370"
+  },
+  "tc61": {
+    "od": "2026-11-14"
+  },
+  "tc62": {
+    "nazwa": "DEPARTAMENT BANKOWOŚCI ZAGRANICZNEJ i INSTYTUCJONALNEJ",
+    "od": "2026-11-13"
+  },
+  "tc63": {
+    "od": "2020-01-01",
+    "do": "2020-01-31"
+  }
+}

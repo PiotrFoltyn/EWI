@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import { BasePage } from './base.page';
+import { RaportyPage } from './raporty.page';
 import { RejestrJednostekPage } from './rejestr-jednostek.page';
 import { ZarzadzaniePage } from './zarzadzanie.page';
 
@@ -16,6 +17,17 @@ export class DashboardPage extends BasePage {
     await expect(this.page).toHaveTitle('Dashboard');
     await this.poPrzejsciuEkranu();
     await expect(this.menu.rejestrJednostek).toBeVisible();
+  }
+
+  /**
+   * Przechodzi do zakładki „Raporty” z menu głównego.
+   * @returns załadowany ekran Raporty
+   */
+  async otworzRaporty(): Promise<RaportyPage> {
+    await this.menu.raporty.click();
+    const raporty = new RaportyPage(this.page);
+    await raporty.expectLoaded();
+    return raporty;
   }
 
   /**
