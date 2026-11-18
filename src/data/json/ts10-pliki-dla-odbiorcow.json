@@ -94,6 +94,7 @@
   "nazwaPlikuMpkDict": "^MPK_DICT_\\d{8}\\.xlsx$",
   "nazwaPlikuTemat5013": "^Temat 5013 - \\d{2} \\d{2} \\d{4}\\.xlsx$",
   "tc49": {
-    "probkiMpk": ["Y2D10000", "Y4D00300", "A1710P03"]
+    "probkiMpk": ["Y2D10000", "Y4D00300", "A1710P03"],
+    "zlikwidowaneBezDatyWeWzorcu": 3284
   }
 }

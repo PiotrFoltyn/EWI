@@ -1,4 +1,5 @@
 import { expect, type Download, type Locator, type Page } from '@playwright/test';
+import { KalendarzComponent } from '../components/kalendarz.component';
 import { escapujRegex } from '../utils/wzorce';
 import { BasePage } from './base.page';
 
@@ -54,7 +55,9 @@ export class RaportyPage extends BasePage {
     this.przyciskGenerujAdHoc = main.getByRole('button', { name: 'Generuj i pobierz raport' });
     this.komunikat = page.locator('.feedback-message');
     // Sekcja „Raport ad hoc” to karta OutSystems UI bez roli – zawężamy przez kartę z przyciskiem generowania.
-    this.sekcjaAdHoc = main.locator('.card').filter({ has: this.przyciskGenerujAdHoc });
+    this.sekcjaAdHoc = main
+      .locator('.card')
+      .filter({ has: page.getByRole('button', { name: 'Generuj i pobierz raport' }) });
   }
 
   /** Ekran jest gotowy po zakończeniu przejścia i wczytaniu listy plików dla odbiorców. */
@@ -83,11 +86,23 @@ export class RaportyPage extends BasePage {
   }
 
   /**
-   * Akcja „Generuj” raportu standardowego. Nie czeka na koniec – test sprawdza kolumnę „Wygenerowano”.
+   * Generuje raport standardowy „Teraz” przez okno „Generowanie pliku …” i czeka na zamknięcie okna.
+   * Okno ma domyślnie zaznaczone „Po wygenerowaniu wyślij plik na skrzynkę Alnovy” – to wysyłka do systemu zewnętrznego,
+   * więc metoda ZAWSZE ją odznacza (testy nie mogą wysyłać plików do Alnovy).
+   * Nie czeka na koniec generowania – test sprawdza kolumnę „Wygenerowano”.
    * @param raport - raport z `RaportStandardowy`
    */
   async generuj(raport: RaportStandardowy): Promise<void> {
     await this.wierszRaportu(raport).getByRole('button', { name: 'Generuj' }).click();
+    const okno = this.page.getByRole('dialog').filter({ hasText: 'Generowanie pliku' });
+    await expect(okno).toBeVisible();
+    await okno.getByRole('radio', { name: 'Teraz' }).check();
+    // Jedyny checkbox w oknie (bez nazwy dostępności) – „wyślij plik na skrzynkę Alnovy”.
+    const wysylkaDoAlnovy = okno.getByRole('checkbox');
+    await wysylkaDoAlnovy.uncheck();
+    await expect(wysylkaDoAlnovy).not.toBeChecked();
+    await okno.getByRole('button', { name: 'Generuj', exact: true }).click();
+    await expect(okno).toBeHidden();
   }
 
   /**
@@ -120,7 +135,8 @@ export class RaportyPage extends BasePage {
   }
 
   /**
-   * Wybiera wartość filtra: rozwija listę, wpisuje wartość w „Szukaj” (min. 3 znaki) i klika opcję o dokładnie tym tekście.
+   * Wybiera wartość filtra: rozwija listę, wpisuje wartość w „Szukaj” (min. 3 znaki) i klika opcję zaczynającą się
+   * od tej wartości (opcje PS / O-ZSI mogą zawierać po wartości nazwę jednostki).
    * @param filtr - filtr z `FiltrAdHoc`
    * @param wartosc - wartość do wybrania
    */
@@ -129,36 +145,22 @@ export class RaportyPage extends BasePage {
     await this.page.getByRole('searchbox', { name: 'Szukaj' }).filter({ visible: true }).fill(wartosc);
     await this.page
       .getByRole('option')
-      .filter({ visible: true, hasText: new RegExp(`^\\s*${escapujRegex(wartosc)}\\s*$`) })
+      .filter({ visible: true, hasText: new RegExp(`^\\s*${escapujRegex(wartosc)}(\\s|$)`) })
       .first()
       .click();
     await expect(this.poleFiltra(filtr)).toContainText(wartosc);
   }
 
   /**
-   * Ustawia datę w polu kalendarza (flatpickr): otwiera kalendarz, przechodzi do miesiąca i klika dzień.
-   * Pole tekstowe jest tylko do odczytu – wpisanie daty z klawiatury nie działa.
+   * Kalendarz pola daty obowiązywania raportu ad hoc.
    * @param indeksPola - 0 = „Data obowiązywania od”, 1 = „Data obowiązywania do”
-   * @param data - data do ustawienia (dzień kalendarzowy)
+   * @returns komponent kalendarza
    */
-  async ustawDate(indeksPola: number, data: Date): Promise<void> {
-    const pole = this.sekcjaAdHoc.getByRole('combobox', { name: 'YYYY-MM-DD' }).nth(indeksPola);
-    await pole.click();
-    const kalendarz = this.page.getByRole('dialog', { name: 'Kalendarz' }).filter({ visible: true });
-    await expect(kalendarz).toBeVisible();
-    const dzis = new Date();
-    const roznicaMiesiecy = (data.getFullYear() - dzis.getFullYear()) * 12 + (data.getMonth() - dzis.getMonth());
-    // `.flatpickr-*` – klasy komponentu kalendarza OutSystems UI (strzałki i dni nie mają nazw dostępności).
-    const strzalka = kalendarz.locator(roznicaMiesiecy < 0 ? '.flatpickr-prev-month' : '.flatpickr-next-month');
-    for (let i = 0; i < Math.abs(roznicaMiesiecy); i++) {
-      await strzalka.click();
-    }
-    await kalendarz
-      .locator('.flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)')
-      .getByText(String(data.getDate()), { exact: true })
-      .click();
-    const iso = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
-    await expect(pole).toHaveValue(iso);
+  kalendarz(indeksPola: number): KalendarzComponent {
+    return new KalendarzComponent(
+      this.page,
+      this.sekcjaAdHoc.getByRole('combobox', { name: 'YYYY-MM-DD' }).nth(indeksPola),
+    );
   }
 
   /**
@@ -171,8 +173,8 @@ export class RaportyPage extends BasePage {
     for (const [filtr, wartosc] of Object.entries(ustawienia.filtry ?? {}) as [FiltrAdHoc, string][]) {
       await this.wybierzFiltr(filtr, wartosc);
     }
-    await this.ustawDate(0, ustawienia.dataOd);
-    await this.ustawDate(1, ustawienia.dataDo);
+    await this.kalendarz(0).ustaw(ustawienia.dataOd);
+    await this.kalendarz(1).ustaw(ustawienia.dataDo);
     await expect(this.przyciskGenerujAdHoc).toBeEnabled();
     const pobranie = this.page.waitForEvent('download', { timeout: 120_000 });
     await this.przyciskGenerujAdHoc.click();

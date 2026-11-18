@@ -232,7 +232,7 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
 
       // Assert
       const arkusz = await czytajArkusz(plik);
-      expect(wierszeDanych(arkusz, 4).length, 'plik zawiera jednostki').toBeGreaterThan(0);
+      expect(wierszeDanych(arkusz, dane.wierszNaglowkowTemat5013).length, 'plik zawiera jednostki').toBeGreaterThan(0);
     },
   );
 });

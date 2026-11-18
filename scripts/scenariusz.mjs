@@ -33,10 +33,20 @@ if (!scenariusz) {
   process.exit(1);
 }
 
+/** Rozwija zakres „TC-71 – TC-89” (myślnik lub półpauza) na listę identyfikatorów; pojedynczy identyfikator bez zmian. */
+function rozwinZakres(fragment) {
+  const zakres = fragment.match(/^TC-(\d+)\s*[–-]\s*TC-(\d+)$/);
+  if (!zakres) return [fragment];
+  const [od, doNumeru] = [Number(zakres[1]), Number(zakres[2])];
+  const szerokosc = zakres[1].length;
+  return Array.from({ length: doNumeru - od + 1 }, (_, i) => `TC-${String(od + i).padStart(szerokosc, '0')}`);
+}
+
 const idPrzypadkow = tekst(scenariusz['Przypadki testowe'])
   .split(',')
   .map((id) => id.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .flatMap(rozwinZakres);
 const wedlugId = (nazwaArkusza) => new Map(wiersze(nazwaArkusza).map((w) => [tekst(w['Test Case Identifier']), w]));
 const przypadki = wedlugId('Przypadki');
 const kwalifikacja = wedlugId('Kwalifikacja');

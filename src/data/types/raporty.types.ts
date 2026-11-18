@@ -25,13 +25,16 @@ export interface DaneTs10 {
   formatPs: string;
   nazwaPlikuMpkDict: string;
   nazwaPlikuTemat5013: string;
-  /** Jednostki dev porównywane z kartą (TC-49). */
-  tc49: { probkiMpk: string[] };
+  /**
+   * TC-49: `probkiMpk` – jednostki dev porównywane z kartą; `zlikwidowaneBezDatyWeWzorcu` – wiersze „_likw” bez „data likwidacji” we wzorcu od odbiorcy (dane źródłowe). */
+  tc49: { probkiMpk: string[]; zlikwidowaneBezDatyWeWzorcu: number };
 }
 
 /** Dane stałe scenariusza TS_11 – raport ad hoc (raport własny); daty „do” = dziś z buildera. */
 export interface DaneTs11 {
+  /** Raport ad hoc: tytuł w wierszu 1, nagłówki w wierszu 2. */
   wierszNaglowkow: number;
+  wierszNaglowkowTemat5013: number;
   kolumny: { nazwa: string; ps: string; mpk: string; ozsi: string; dataObowiazywania: string };
   /** Początek okresu obejmującego zmiany jednostek na dev (import 13.11.2026). */
   okresZmian: { od: string };

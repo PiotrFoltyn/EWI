@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { PanelFiltrow } from '../components/panel-filtrow.component';
+import { PanelFiltrow, type UstawieniaFiltrow } from '../components/panel-filtrow.component';
 import { TabelaJednostek } from '../components/tabela-jednostek.component';
 import { BasePage } from './base.page';
 import { KartaJednostkiPage } from './karta-jednostki.page';
@@ -80,6 +80,45 @@ export class RejestrJednostekPage extends BasePage {
    */
   async otworzKarteJednostki(mpk: string): Promise<KartaJednostkiPage> {
     return this.otworzKarte(await this.wyszukajJednostke(mpk));
+  }
+
+  /**
+   * Szuka na liście (po ustawieniu filtrów) jednostki, której karta pozwala złożyć zgłoszenie – czyli bez otwartego
+   * zgłoszenia (karta jednostki z otwartym zgłoszeniem nie ma przycisków „Zgłoś zmianę” / „Zgłoś likwidację”).
+   * Przegląda kolejne wiersze i strony listy; testy na współdzielonym dev „zużywają” jednostki, więc stałe MPK
+   * szybko by się wyczerpały.
+   * @param filtry - filtry listy (np. typ jednostki i status „Aktywna”)
+   * @param maksymalnieKart - limit otwieranych kart
+   * @returns karta pierwszej jednostki bez otwartego zgłoszenia
+   */
+  async otworzKarteBezOtwartegoZgloszenia(
+    filtry: UstawieniaFiltrow,
+    maksymalnieKart = 30,
+  ): Promise<KartaJednostkiPage> {
+    await this.filtry.ustaw(filtry);
+    await expect(this.licznikWynikow).toBeVisible();
+    const naStronie = await this.tabela.wiersze.count();
+    for (let proba = 0; proba < maksymalnieKart; proba++) {
+      const indeks = proba % naStronie;
+      if (proba > 0 && indeks === 0) {
+        await this.przejdzNaNastepnaStrone();
+      }
+      const karta = await this.otworzKarte(indeks);
+      if (await karta.przyciskZglosZmiane.isVisible()) {
+        return karta;
+      }
+      await karta.wrocDoWynikow();
+    }
+    throw new Error(
+      `Brak jednostki bez otwartego zgłoszenia wśród ${maksymalnieKart} kart (filtry: ${JSON.stringify(filtry)})`,
+    );
+  }
+
+  /** Przechodzi na następną stronę listy i czeka na zmianę licznika paginacji. */
+  async przejdzNaNastepnaStrone(): Promise<void> {
+    const przed = await this.licznikWynikow.innerText();
+    await this.page.getByRole('button', { name: 'go to next page' }).click();
+    await expect(this.licznikWynikow).not.toHaveText(przed);
   }
 
   /**

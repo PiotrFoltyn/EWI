@@ -1,0 +1,13 @@
+{
+  "filtryAktywnejJt": {
+    "typJednostki": "Jednostka techniczna",
+    "status": "Aktywna"
+  },
+  "filtryZlikwidowanejJt": {
+    "typJednostki": "Jednostka techniczna",
+    "status": "Zlikwidowana"
+  },
+  "komunikatWyslania": "Zgłoszenie zostało wysłane.",
+  "komunikatWymaganegoPola": "This field is required.",
+  "poleZmianyNazwy": "Nazwa"
+}

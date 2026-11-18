@@ -21,10 +21,10 @@ Stos: `@playwright/test` + TypeScript (strict, CommonJS), ESLint, Prettier.
 
 ## Struktura
 
-- `src/pages` – Page Objecty (`BasePage`, `LoginPage`, `DashboardPage`, `RejestrJednostekPage`, `KartaJednostkiPage`, `ZarzadzaniePage`)
-- `src/components` – `MenuGlowne`, `TabelaJednostek`, `PanelFiltrow`, `SlownikComponent`
-- `src/fixtures` – `test` z opcją `rola`, logowaniem i `dashboardPage`
-- `src/data/json` – dane stałe scenariuszy; `src/data/types` – ich interfejsy; `src/data/tagi.ts` – tagi
+- `src/pages` – Page Objecty (`BasePage`, `LoginPage`, `DashboardPage`, `RejestrJednostekPage`, `KartaJednostkiPage`, `ZarzadzaniePage`, `RaportyPage`, `ZgloszeniePage`, `PodgladZgloszeniaPage`)
+- `src/components` – `MenuGlowne`, `TabelaJednostek`, `PanelFiltrow`, `SlownikComponent`, `KalendarzComponent`
+- `src/fixtures` – `test` z opcją `rola`, logowaniem, `dashboardPage` i `zgloszeniaDoWycofania` (sprzątanie zgłoszeń po teście)
+- `src/data/builders` – unikalne dane (data i godzina) tworzonych rekordów; `src/data/json` – dane stałe scenariuszy; `src/data/types` – ich interfejsy; `src/data/tagi.ts` – tagi
 - `tests/e2e/tsXX-<nazwa>.spec.ts` – jeden plik = jeden scenariusz; wszystkie scenariusze płasko w `tests/e2e` (bez podfolderów obszarów)
 
 ## Zasady
@@ -34,7 +34,8 @@ Najważniejsze w skrócie:
 
 - `test.describe` = scenariusz TS, `test` = przypadek TC; tylko komentarze `// Arrange`, `// Act`, `// Assert` – bez `test.step`.
 - Lokatory po rolach i etykietach, nigdy po generowanych ID OutSystems; web-first assertions; zakaz `waitForTimeout`.
-- Dane stałe w `.json` (import `import * as`), daty i unikalne wartości z buildera.
+- Dane stałe w `.json` (import `import * as`), daty i unikalne wartości z buildera – w EWI nie może być duplikatów, więc każdy tworzony rekord (zgłoszenie, pozycja słownika) ma wartości z datą i godziną.
+- Testy nie wysyłają niczego do systemów zewnętrznych (np. „wyślij plik na skrzynkę Alnovy” zawsze odznaczone).
 - Każdy test ma tagi: TS, TC, priorytet, pozytywny/negatywny, e2e/api (z `TAGI`).
 
 ## Zanim uznasz zadanie za skończone

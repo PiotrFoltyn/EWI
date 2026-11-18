@@ -78,9 +78,11 @@ test.describe(
 
         // Act
         await raporty.generuj(RaportStandardowy.MpkDict);
-        await expect(raporty.wygenerowano(RaportStandardowy.MpkDict)).not.toHaveText(przedGenerowaniem, {
+        // Generowanie jest asynchroniczne – plik jest gotowy, gdy „Wygenerowano” pokazuje dzisiejszą datę i nową godzinę.
+        await expect(raporty.wygenerowano(RaportStandardowy.MpkDict)).toContainText(dzisiejszaDataIso(), {
           timeout: 180_000,
         });
+        await expect(raporty.wygenerowano(RaportStandardowy.MpkDict)).not.toHaveText(przedGenerowaniem);
         const plik = await zapiszPobranie(await raporty.pobierz(RaportStandardowy.MpkDict), testInfo);
 
         // Assert
@@ -92,10 +94,11 @@ test.describe(
           zlikwidowane.filter((w) => !w[kolumny.kodSp]),
           'zlikwidowane bez „Kod jednostki sp”',
         ).toEqual([]);
+        // Źródło (wzorzec od odbiorcy) też ma wiersze „_likw” bez daty likwidacji – EWI nie może ich mieć więcej.
         expect(
-          zlikwidowane.filter((w) => !w[kolumny.dataLikwidacji]),
-          'zlikwidowane bez „data likwidacji”',
-        ).toEqual([]);
+          zlikwidowane.filter((w) => !w[kolumny.dataLikwidacji]).length,
+          'zlikwidowane bez „data likwidacji” (nie więcej niż we wzorcu)',
+        ).toBeLessThanOrEqual(dane.tc49.zlikwidowaneBezDatyWeWzorcu);
 
         for (const mpk of dane.tc49.probkiMpk) {
           const wiersz = wiersze.find((w) => w[kolumny.kodMpk] === mpk);
@@ -152,9 +155,10 @@ test.describe(
 
         // Act
         await raporty.generuj(RaportStandardowy.Temat5013);
-        await expect(raporty.wygenerowano(RaportStandardowy.Temat5013)).not.toHaveText(przedGenerowaniem, {
+        await expect(raporty.wygenerowano(RaportStandardowy.Temat5013)).toContainText(dzisiejszaDataIso(), {
           timeout: 180_000,
         });
+        await expect(raporty.wygenerowano(RaportStandardowy.Temat5013)).not.toHaveText(przedGenerowaniem);
         const plik = await zapiszPobranie(await raporty.pobierz(RaportStandardowy.Temat5013), testInfo);
 
         // Assert

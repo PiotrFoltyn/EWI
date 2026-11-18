@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { escapujRegex } from '../utils/wzorce';
 import { BasePage } from './base.page';
+import { ZgloszeniePage } from './zgloszenie.page';
 
 /** Kolejność kolumn tabeli komórek MPK w sekcji „Umiejscowienie i struktura jednostki” (komórki bez nazw dostępności). */
 export enum KolumnaKomorkiMpk {
@@ -254,6 +255,46 @@ export class KartaJednostkiPage extends BasePage {
     await karta.expectLoaded();
     await expect(karta.nazwaWNaglowku).not.toHaveText(poprzedniaNazwa);
     return karta;
+  }
+
+  /**
+   * Przycisk „Zgłoś zmianę” – widoczny tylko, gdy jednostka nie ma otwartego zgłoszenia i rola może je złożyć.
+   * @returns lokator przycisku
+   */
+  get przyciskZglosZmiane(): Locator {
+    return this.page.getByRole('main').getByRole('button', { name: 'Zgłoś zmianę' });
+  }
+
+  /**
+   * Przycisk „Zgłoś likwidację” – widoczny tylko dla jednostki aktywnej bez otwartego zgłoszenia.
+   * @returns lokator przycisku
+   */
+  get przyciskZglosLikwidacje(): Locator {
+    return this.page.getByRole('main').getByRole('button', { name: 'Zgłoś likwidację' });
+  }
+
+  /**
+   * Otwiera formularz zgłoszenia zmiany z wybraną jednostką (akcja „Zgłoś zmianę”).
+   * @returns załadowany formularz zgłoszenia
+   */
+  async zglosZmiane(): Promise<ZgloszeniePage> {
+    return this.otworzFormularz(this.przyciskZglosZmiane);
+  }
+
+  /**
+   * Otwiera formularz zgłoszenia likwidacji z wybraną jednostką (akcja „Zgłoś likwidację”).
+   * @returns załadowany formularz zgłoszenia
+   */
+  async zglosLikwidacje(): Promise<ZgloszeniePage> {
+    return this.otworzFormularz(this.przyciskZglosLikwidacje);
+  }
+
+  private async otworzFormularz(przycisk: Locator): Promise<ZgloszeniePage> {
+    await przycisk.click();
+    const formularz = new ZgloszeniePage(this.page);
+    await formularz.expectLoaded();
+    await expect(formularz.wybranaJednostka).toBeVisible();
+    return formularz;
   }
 
   /** Wraca do listy wyników z zachowaniem wyszukiwania i filtrów. */
