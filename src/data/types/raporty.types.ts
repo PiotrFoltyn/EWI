@@ -44,5 +44,6 @@ export interface DaneTs11 {
   tc60: { ozsi: string };
   tc61: { od: string };
   tc62: { nazwa: string; od: string };
-  tc63: { od: string; do: string };
+  /** Okres bez zmian i komunikat w wierszu „Ostatni raport ad hoc nie powstał (…): <komunikat>”. */
+  tc63: { od: string; do: string; komunikatBrakuZmian: string };
 }

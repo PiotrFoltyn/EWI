@@ -1,9 +1,9 @@
 import { expect, type Download, type Locator, type Page } from '@playwright/test';
-import { KalendarzComponent } from '../components/kalendarz.component';
+import { dataIso, KalendarzComponent } from '../components/kalendarz.component';
 import { escapujRegex } from '../utils/wzorce';
 import { BasePage } from './base.page';
 
-/** Maksymalny czas oczekiwania na plik lub komunikat po „Generuj i pobierz raport”. */
+/** Maksymalny czas oczekiwania na nowy raport ad hoc lub komunikat po „Generuj raport”. */
 const CZAS_ODPOWIEDZI_AD_HOC = 60_000;
 
 /** Pliki dla odbiorców (raporty standardowe) – tekst kolumny „Raport” dokładnie jak w aplikacji. */
@@ -42,9 +42,17 @@ export interface WynikRaportuAdHoc {
  */
 export class RaportyPage extends BasePage {
   readonly tabelaPlikow: Locator;
+  /** „Generuj raport” karty „Raport ad hoc” (Administrator) – generuje plik bez pobierania. */
   readonly przyciskGenerujAdHoc: Locator;
   /** Tytuł sekcji „Raport ad hoc” (raport własny użytkownika). */
   readonly tytulRaportuAdHoc: Locator;
+  /**
+   * Wiersz stanu ostatniego raportu ad hoc (wspólny dla wszystkich użytkowników): „Ostatni raport ad hoc: <plik> –
+   * N wierszy, <data godzina>, <login>” albo „Ostatni raport ad hoc nie powstał (<data godzina>): <komunikat>”.
+   */
+  readonly ostatniRaportAdHoc: Locator;
+  /** „Pobierz” ostatniego raportu ad hoc. */
+  readonly przyciskPobierzAdHoc: Locator;
   /** Komunikat platformy OutSystems (Feedback Message) – `.feedback-message` bez stałej roli dostępności. */
   readonly komunikat: Locator;
   private readonly sekcjaAdHoc: Locator;
@@ -60,15 +68,16 @@ export class RaportyPage extends BasePage {
     this.tabelaPlikow = main
       .getByRole('grid')
       .filter({ has: page.getByRole('gridcell', { name: RaportStandardowy.MpkDict, exact: true }) });
-    this.przyciskGenerujAdHoc = main.getByRole('button', { name: 'Generuj i pobierz raport' });
     this.tytulRaportuAdHoc = main.getByText('Raport ad hoc', { exact: true });
     this.komunikat = page.locator('.feedback-message');
-    // Karta raportu własnego (Użytkownik: „Własny raport”) to karta OutSystems UI bez roli – zawężamy przez kartę
-    // z przyciskiem generowania. Administrator ma od 19.11.2026 kartę „Raport ad hoc” z „Generuj raport” i osobnym
-    // „Pobierz” – metody ad hoc jej nie obsługują.
+    // Karta „Raport ad hoc” Administratora to karta OutSystems UI bez roli – zawężamy przez kartę z „Generuj raport”.
+    // Użytkownik podstawowy ma inną kartę („Własny raport”, „Generuj i pobierz raport”) – metody ad hoc jej nie obsługują.
     this.sekcjaAdHoc = main
       .locator('.card')
-      .filter({ has: page.getByRole('button', { name: 'Generuj i pobierz raport' }) });
+      .filter({ has: page.getByRole('button', { name: 'Generuj raport', exact: true }) });
+    this.przyciskGenerujAdHoc = this.sekcjaAdHoc.getByRole('button', { name: 'Generuj raport', exact: true });
+    this.ostatniRaportAdHoc = this.sekcjaAdHoc.getByText(/^Ostatni raport ad hoc/);
+    this.przyciskPobierzAdHoc = this.sekcjaAdHoc.getByRole('button', { name: 'Pobierz', exact: true });
   }
 
   /** Ekran jest gotowy po zakończeniu przejścia i wczytaniu listy plików dla odbiorców. */
@@ -175,9 +184,10 @@ export class RaportyPage extends BasePage {
   }
 
   /**
-   * Ustawia filtry i daty raportu ad hoc i uruchamia „Generuj i pobierz raport”.
-   * Zwraca plik albo – gdy aplikacja zamiast pliku pokaże komunikat (np. brak danych) – treść komunikatu.
-   * Gdy w `CZAS_ODPOWIEDZI_AD_HOC` nie ma ani pliku, ani komunikatu, zwraca oba pola `null` (test rozstrzyga, czy to błąd).
+   * Ustawia filtry i daty raportu ad hoc, uruchamia „Generuj raport”, czeka na nowy wpis „Ostatni raport ad hoc”
+   * z plikiem tego okresu i pobiera go („Pobierz”). Gdy raport nie powstał („Ostatni raport ad hoc nie powstał (…): …”)
+   * albo platforma pokaże komunikat, zwraca jego treść. Gdy w `CZAS_ODPOWIEDZI_AD_HOC` nie ma ani nowego raportu,
+   * ani komunikatu, zwraca oba pola `null` (test rozstrzyga, czy to błąd).
    * @param ustawienia - daty obowiązywania i filtry
    * @returns pobrany plik, komunikat albo brak odpowiedzi aplikacji
    */
@@ -188,22 +198,40 @@ export class RaportyPage extends BasePage {
     await this.kalendarz(0).ustaw(ustawienia.dataOd);
     await this.kalendarz(1).ustaw(ustawienia.dataDo);
     await expect(this.przyciskGenerujAdHoc).toBeEnabled();
-    const pobranie = this.page.waitForEvent('download', { timeout: CZAS_ODPOWIEDZI_AD_HOC });
-    await this.przyciskGenerujAdHoc.click();
-    const brakOdpowiedzi: WynikRaportuAdHoc = { pobranie: null, komunikat: null };
-    return Promise.race([
-      pobranie.then((plik): WynikRaportuAdHoc => ({ pobranie: plik, komunikat: null })).catch(() => brakOdpowiedzi),
-      this.komunikat
-        .first()
+    // Wpis jest wspólny dla wszystkich użytkowników – nowy raport rozpoznajemy po nazwie pliku z okresem
+    // („Raport ad hoc RRRR-MM-DD-RRRR-MM-DD.xlsx”, dev 19.11.2026) i po zmianie treści względem stanu sprzed generowania.
+    const poprzedni = (await this.ostatniRaportAdHoc.count()) > 0 ? await this.ostatniRaportAdHoc.innerText() : null;
+    const okres = `${dataIso(ustawienia.dataOd)}-${dataIso(ustawienia.dataDo)}`;
+    const wzorzecNowego = new RegExp(`^Ostatni raport ad hoc: Raport ad hoc ${escapujRegex(okres)}\\.xlsx`);
+    const nowyStan = this.ostatniRaportAdHoc.filter(poprzedni ? { hasNotText: poprzedni } : {});
+    const nowyRaport = nowyStan.filter({ hasText: wzorzecNowego });
+    const raportNiePowstal = nowyStan.filter({ hasText: /^Ostatni raport ad hoc nie powstał \([^)]*\): / });
+    /** Czeka na element; jego brak nie rozstrzyga wyścigu – rozstrzyga go nowy raport (albo jego limit czasu). */
+    const gdyPojawiSie = <T>(lokator: Locator, wynik: T): Promise<T> =>
+      lokator
         .waitFor({ timeout: CZAS_ODPOWIEDZI_AD_HOC })
-        .then(
-          async (): Promise<WynikRaportuAdHoc> => ({
-            pobranie: null,
-            komunikat: await this.komunikat.first().innerText(),
-          }),
-        )
-        // Brak komunikatu nie rozstrzyga wyścigu – rozstrzyga go pobranie (plik albo jego limit czasu).
-        .catch(() => new Promise<never>(() => undefined)),
+        .then(() => wynik)
+        .catch(() => new Promise<never>(() => undefined));
+    await this.przyciskGenerujAdHoc.click();
+    const odpowiedz = await Promise.race([
+      nowyRaport
+        .waitFor({ timeout: CZAS_ODPOWIEDZI_AD_HOC })
+        .then(() => 'raport' as const)
+        .catch(() => 'brak' as const),
+      gdyPojawiSie(raportNiePowstal, 'niePowstal' as const),
+      gdyPojawiSie(this.komunikat.first(), 'komunikat' as const),
     ]);
+    if (odpowiedz === 'niePowstal') {
+      const tekst = await raportNiePowstal.innerText();
+      return { pobranie: null, komunikat: tekst.replace(/^Ostatni raport ad hoc nie powstał \([^)]*\): /, '') };
+    }
+    if (odpowiedz === 'komunikat') {
+      return { pobranie: null, komunikat: await this.komunikat.first().innerText() };
+    }
+    if (odpowiedz === 'brak') {
+      return { pobranie: null, komunikat: null };
+    }
+    const [pobranie] = await Promise.all([this.page.waitForEvent('download'), this.przyciskPobierzAdHoc.click()]);
+    return { pobranie, komunikat: null };
   }
 }
