@@ -260,18 +260,24 @@ test.describe(
 
     test(
       'TC-56 Użytkownik podstawowy pobiera raport standardowy bez generowania dla odbiorców',
-      { tag: ['@TC-56', TAGI.priorytet.wysoki, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e, TAGI.kwalifikacja.regresja] },
-      async ({ dashboardPage }) => {
-        test.fixme(true, 'Brak konta „Użytkownik podstawowy” na dev – test wymaga sesji tej roli.');
-
+      {
+        tag: ['@TC-56', TAGI.priorytet.wysoki, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e, TAGI.kwalifikacja.regresja],
+        annotation: {
+          type: 'założenie',
+          description:
+            'Planowanie i „wyślij plik na skrzynkę Alnovy” są tylko w oknie „Generuj” – brak przycisku „Generuj” obejmuje też te akcje.',
+        },
+      },
+      async ({ dashboardRoli }) => {
         // Arrange
-        // TODO [ZAŁOŻENIE]: dashboard w kontekście roli Rola.UzytkownikPodstawowy (fixture sesji drugiej roli).
-        const raporty = await dashboardPage.otworzRaporty();
+        const dashboard = await dashboardRoli(Rola.UzytkownikPodstawowy);
+        const raporty = await dashboard.otworzRaporty();
 
         // Act
         const wiersz = raporty.wierszRaportu(RaportStandardowy.MpkDict);
 
         // Assert
+        // „Pobierz” widoczne = wiersz wyrenderowany, więc brak „Generuj” nie wynika z niezaładowanej tabeli.
         await expect(wiersz.getByRole('link', { name: 'Pobierz' })).toBeVisible();
         await expect(wiersz.getByRole('button', { name: 'Generuj' })).toHaveCount(0);
       },

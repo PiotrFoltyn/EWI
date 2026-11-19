@@ -1,0 +1,22 @@
+{
+  "tc34": {
+    "powitanie": "Dzień dobry,",
+    "opis": "Sprawdź nowe zgłoszenia, przejmij je do realizacji i śledź jednostki wymagające działania.",
+    "przyciskNowegoZgloszenia": "Nowe zgłoszenie – jednostka techniczna +",
+    "pozycjeMenu": ["Lista zadań", "Rejestr jednostek", "Raporty"],
+    "sekcje": ["Zgłoszenia do obsługi", "Moje zgłoszenia"],
+    "placeholderWyszukiwarki": "Wyszukaj po fragmencie nazwy pełnej lub krótkiej"
+  },
+  "tc36": {
+    "raportyStandardowe": [
+      "Temat 5013 – pełny wykaz jednostek",
+      "MPK_DICT – pełna historia jednostek",
+      "Plik zmian dla O-ZSI"
+    ],
+    "raportWlasny": "Raport ad hoc"
+  },
+  "tc38": {
+    "komunikatBrakuZgloszen": "Brak zgłoszeń dla wybranych filtrów.",
+    "filtryOddzialowWLikwidacji": { "status": "W likwidacji", "typJednostki": "Oddział" }
+  }
+}

@@ -18,4 +18,8 @@ export interface DaneTs09 {
   komunikatDuplikatu: string;
   /** Dopisywany do nazwy przy edycji (TC-40, TC-45). */
   przyrostekNowejNazwy: string;
+  /** Ekran OutSystems, na który aplikacja przekierowuje rolę bez uprawnień (TC-46). */
+  adresBrakuUprawnien: string;
+  /** Komunikat ekranu braku uprawnień (TC-46). */
+  komunikatBrakuUprawnien: string;
 }

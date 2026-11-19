@@ -1,4 +1,11 @@
-import { test as base } from '@playwright/test';
+import {
+  test as base,
+  type Browser,
+  type BrowserContext,
+  type BrowserContextOptions,
+  type TestInfo,
+  type WorkerInfo,
+} from '@playwright/test';
 import type { UstawieniaFiltrow } from '../components/panel-filtrow.component';
 import { pobierzKonto } from '../config/konta';
 import { sciezkaStanuSesji } from '../config/stan-sesji';
@@ -28,6 +35,11 @@ export interface FixturesWorkeraEwi {
    * Zmiany nie da się cofnąć – jednostka zostaje zmieniona na dev.
    */
   zrealizowanaZmianaJednostki: ZrealizowanaZmiana;
+  /**
+   * Sesja dowolnej roli obok roli pliku spec – logowanie przy pierwszym użyciu roli w workerze, potem z pamięci.
+   * @returns funkcja zwracająca ścieżkę `storageState` z sesją podanej roli
+   */
+  sesjaInnejRoli: (rola: Rola) => Promise<string>;
 }
 
 /** Jednostka zmieniona pełnym obiegiem zgłoszenia (złożenie → przejęcie → akceptacja → realizacja). */
@@ -50,12 +62,51 @@ export interface FixturesEwi {
    * nie przyjmuje kolejnego). Zgłoszeń w „Akceptacji kosztów” nie da się wycofać – zostają.
    */
   zgloszeniaDoWycofania: string[];
+  /**
+   * Otwiera dashboard w osobnym kontekście przeglądarki z sesją podanej roli (testy uprawnień i wieloosobowe).
+   * Konteksty są zamykane po teście.
+   * @returns funkcja zwracająca załadowany dashboard zalogowanej roli
+   */
+  dashboardRoli: (rola: Rola) => Promise<DashboardPage>;
 }
 
 const KOMENTARZ_WYCOFANIA = 'Wycofanie po teście automatycznym (sprzątanie danych dev)';
 
 /** Filtry Rejestru dla jednostek, które Administrator może zgłosić do zmiany (kafelek jednostki technicznej). */
 const FILTRY_AKTYWNEJ_JT: UstawieniaFiltrow = { typJednostki: 'Jednostka techniczna', status: 'Aktywna' };
+
+/**
+ * Loguje się kontem roli z `.env` przez ekran logowania i zapisuje sesję do pliku.
+ * @param browser - przeglądarka workera
+ * @param rola - rola, której kontem się logujemy
+ * @param workerInfo - informacje workera (baseURL projektu, indeks workera)
+ * @returns ścieżka do pliku `storageState` z sesją roli
+ */
+async function zalogujIZapiszSesje(browser: Browser, rola: Rola, workerInfo: WorkerInfo): Promise<string> {
+  const konto = pobierzKonto(rola);
+  const sciezka = sciezkaStanuSesji(rola, workerInfo.parallelIndex);
+  const kontekst = await browser.newContext({ baseURL: workerInfo.project.use.baseURL });
+  try {
+    const loginPage = new LoginPage(await kontekst.newPage());
+    await loginPage.goto();
+    await loginPage.zaloguj(konto);
+    await kontekst.storageState({ path: sciezka });
+  } finally {
+    await kontekst.close();
+  }
+  return sciezka;
+}
+
+/**
+ * Opcje nowego kontekstu przeglądarki zgodne z ustawieniami projektu.
+ * @param info - informacje workera lub testu
+ * @param storageState - ścieżka sesji roli
+ * @returns opcje `browser.newContext`
+ */
+function opcjeKontekstu(info: WorkerInfo | TestInfo, storageState: string): BrowserContextOptions {
+  const { baseURL, locale, timezoneId } = info.project.use;
+  return { baseURL, locale, timezoneId, storageState };
+}
 
 /**
  * Test EWI z automatycznym logowaniem.
@@ -67,23 +118,29 @@ export const test = base.extend<FixturesEwi, OpcjeEwi & FixturesWorkeraEwi>({
 
   sesjaRoli: [
     async ({ rola, browser }, use, workerInfo) => {
-      const konto = pobierzKonto(rola);
-      const sciezka = sciezkaStanuSesji(rola, workerInfo.parallelIndex);
-      const kontekst = await browser.newContext({ baseURL: workerInfo.project.use.baseURL });
-      const loginPage = new LoginPage(await kontekst.newPage());
-      await loginPage.goto();
-      await loginPage.zaloguj(konto);
-      await kontekst.storageState({ path: sciezka });
-      await kontekst.close();
-      await use(sciezka);
+      await use(await zalogujIZapiszSesje(browser, rola, workerInfo));
     },
     { scope: 'worker', title: 'logowanie do EWI' },
   ],
 
+  sesjaInnejRoli: [
+    async ({ browser }, use, workerInfo) => {
+      const sesje = new Map<Rola, Promise<string>>();
+      await use((rola) => {
+        let sesja = sesje.get(rola);
+        if (!sesja) {
+          sesja = zalogujIZapiszSesje(browser, rola, workerInfo);
+          sesje.set(rola, sesja);
+        }
+        return sesja;
+      });
+    },
+    { scope: 'worker', title: 'logowanie drugiej roli do EWI' },
+  ],
+
   zrealizowanaZmianaJednostki: [
     async ({ browser, sesjaRoli }, use, workerInfo) => {
-      const { baseURL, locale, timezoneId } = workerInfo.project.use;
-      const kontekst = await browser.newContext({ baseURL, locale, timezoneId, storageState: sesjaRoli });
+      const kontekst = await browser.newContext(opcjeKontekstu(workerInfo, sesjaRoli));
       const page = await kontekst.newPage();
       const zgloszenie = zbudujDaneZgloszenia('ZMIANA');
       let podglad: PodgladZgloszeniaPage | undefined;
@@ -125,6 +182,21 @@ export const test = base.extend<FixturesEwi, OpcjeEwi & FixturesWorkeraEwi>({
     await dashboard.goto();
     await use(dashboard);
   },
+
+  dashboardRoli: [
+    async ({ browser, sesjaInnejRoli }, use, testInfo) => {
+      const konteksty: BrowserContext[] = [];
+      await use(async (rola) => {
+        const kontekst = await browser.newContext(opcjeKontekstu(testInfo, await sesjaInnejRoli(rola)));
+        konteksty.push(kontekst);
+        const dashboard = new DashboardPage(await kontekst.newPage());
+        await dashboard.goto();
+        return dashboard;
+      });
+      await Promise.all(konteksty.map((kontekst) => kontekst.close()));
+    },
+    { title: 'dashboard drugiej roli' },
+  ],
 
   zgloszeniaDoWycofania: [
     async ({ page }, use) => {

@@ -37,11 +37,14 @@ export interface WynikRaportuAdHoc {
 
 /**
  * Ekran „Raporty” (`/EWI/Reports`): pliki dla odbiorców (Generuj / Pobierz), statystyki zdarzeń i raport ad hoc.
+ * Użytkownik podstawowy widzi te pliki jako „Raporty standardowe” – tylko „Pobierz”, bez „Generuj”.
  * Raport ad hoc to zestawienie zmian jednostek w okresie „Data obowiązywania od–do” zawężone filtrami.
  */
 export class RaportyPage extends BasePage {
   readonly tabelaPlikow: Locator;
   readonly przyciskGenerujAdHoc: Locator;
+  /** Tytuł sekcji „Raport ad hoc” (raport własny użytkownika). */
+  readonly tytulRaportuAdHoc: Locator;
   /** Komunikat platformy OutSystems (Feedback Message) – `.feedback-message` bez stałej roli dostępności. */
   readonly komunikat: Locator;
   private readonly sekcjaAdHoc: Locator;
@@ -52,12 +55,17 @@ export class RaportyPage extends BasePage {
   constructor(page: Page) {
     super(page);
     const main = page.getByRole('main');
+    // Nagłówki zależą od roli (Administrator: „Wygenerowano (data, osoba)”, Użytkownik: „Wygenerowano”), a siatka
+    // „Pliki z poprzednich dni” ma te same kolumny – tabelę plików wyróżnia wiersz MPK_DICT (nie ma go w plikach nocnych).
     this.tabelaPlikow = main
       .getByRole('grid')
-      .filter({ has: page.getByRole('columnheader', { name: 'Wygenerowano (data, osoba)' }) });
+      .filter({ has: page.getByRole('gridcell', { name: RaportStandardowy.MpkDict, exact: true }) });
     this.przyciskGenerujAdHoc = main.getByRole('button', { name: 'Generuj i pobierz raport' });
+    this.tytulRaportuAdHoc = main.getByText('Raport ad hoc', { exact: true });
     this.komunikat = page.locator('.feedback-message');
-    // Sekcja „Raport ad hoc” to karta OutSystems UI bez roli – zawężamy przez kartę z przyciskiem generowania.
+    // Karta raportu własnego (Użytkownik: „Własny raport”) to karta OutSystems UI bez roli – zawężamy przez kartę
+    // z przyciskiem generowania. Administrator ma od 19.11.2026 kartę „Raport ad hoc” z „Generuj raport” i osobnym
+    // „Pobierz” – metody ad hoc jej nie obsługują.
     this.sekcjaAdHoc = main
       .locator('.card')
       .filter({ has: page.getByRole('button', { name: 'Generuj i pobierz raport' }) });

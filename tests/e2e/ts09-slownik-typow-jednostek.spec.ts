@@ -12,7 +12,7 @@ import { dzisiejszaDataIso, escapujRegex, wzorzecLacznejLiczbyWynikow } from '..
 
 const dane: DaneTs09 = ts09Dane;
 
-// TC-39 – TC-45 i TC-47 są dla Administratora; TC-46 wymaga drugiej roli (fixme do czasu konta).
+// TC-39 – TC-45 i TC-47 są dla Administratora; TC-46 – Użytkownik podstawowy w osobnym kontekście (`dashboardRoli`).
 test.use({ rola: Rola.Administrator });
 
 const ZALOZENIE_SLOWNIKA = {
@@ -69,8 +69,10 @@ test.describe(
         annotation: ZALOZENIE_SLOWNIKA,
       },
       async ({ dashboardPage }) => {
-        test.fixme(true, POZA_SLOWNIKIEM);
-
+        test.fixme(
+          true,
+          `Wykryty bug: Pozycja ze słownika nie pojawia się w filtrze typu Rejestru (P-09: słownik typów = zakładka „Typ jednostki” w Zarządzanie → Słowniki SAP).`,
+        );
         // Arrange
         const typ = nowyTyp();
         const slownik = await otworzSlownikTypow(dashboardPage);
@@ -282,23 +284,26 @@ test.describe(
           '@KO-4.3',
           '@KO-4.6',
         ],
+        annotation: {
+          type: 'założenie',
+          description:
+            'P-04: „informacja o braku uprawnień” = standardowy ekran OutSystems InvalidPermissions (komunikat po angielsku, dev 19.11.2026).',
+        },
       },
-      async ({ dashboardPage }) => {
-        test.fixme(
-          true,
-          'Brak konta „Użytkownik podstawowy” na dev – test wymaga sesji drugiej roli (dodatkowy BrowserContext z fixture).',
-        );
-
+      async ({ dashboardRoli }) => {
         // Arrange
-        // TODO [ZAŁOŻENIE]: dashboard w kontekście roli Rola.UzytkownikPodstawowy (fixture sesji drugiej roli).
-        const page = dashboardPage.page;
-        await expect(dashboardPage.menu.zarzadzanie).toHaveCount(0);
+        const dashboard = await dashboardRoli(Rola.UzytkownikPodstawowy);
+        const page = dashboard.page;
+        // Menu wyrenderowane (pozycja dostępna dla roli) – dopiero wtedy brak „Zarządzanie” coś znaczy.
+        await expect(dashboard.menu.rejestrJednostek).toBeVisible();
+        await expect(dashboard.menu.zarzadzanie).toHaveCount(0);
 
         // Act
         await page.goto(ADRES_ZARZADZANIA);
 
         // Assert
-        // TODO [ZAŁOŻENIE]: asercja komunikatu o braku uprawnień (P-04).
+        await expect(page).toHaveURL(new RegExp(`/${dane.adresBrakuUprawnien}$`));
+        await expect(page.getByText(dane.komunikatBrakuUprawnien)).toBeVisible();
         await expect(page.getByRole('tab', { name: 'Słowniki', exact: true })).toHaveCount(0);
       },
     );

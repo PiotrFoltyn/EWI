@@ -11,8 +11,9 @@ import type { TestInfo } from '@playwright/test';
 const dane: DaneTs11 = ts11Dane;
 const { kolumny } = dane;
 
-// TODO [ZAŁOŻENIE]: zmienić na Rola.UzytkownikPodstawowy po założeniu konta na środowisku.
-test.use({ rola: Rola.Administrator });
+// Raport własny to karta „Własny raport” Użytkownika podstawowego („Generuj i pobierz raport” – plik od razu).
+// Administrator ma inną kartę „Raport ad hoc” (dev 19.11.2026: „Generuj raport” + osobne „Pobierz”) – poza TS_11.
+test.use({ rola: Rola.UzytkownikPodstawowy });
 
 test.describe.configure({ timeout: 240_000 });
 
@@ -236,7 +237,7 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
       annotation: {
         type: 'założenie',
         description:
-          'Raport udostępniony przez Administratora = ostatnio wygenerowany plik dla odbiorców (Temat 5013) – akcja „Pobierz”. Uruchamiane jako Administrator do czasu konta Użytkownika podstawowego.',
+          'Raport udostępniony przez Administratora = ostatnio wygenerowany plik Temat 5013 w „Raporty standardowe” Użytkownika – akcja „Pobierz”.',
       },
     },
     async ({ dashboardPage }, testInfo) => {

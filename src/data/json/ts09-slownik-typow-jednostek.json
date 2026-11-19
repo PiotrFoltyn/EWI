@@ -5,5 +5,7 @@
   "aktywnaNie": "Nie",
   "komunikatWymaganegoPola": "This field is required.",
   "komunikatDuplikatu": "W słowniku tego typu istnieje już pozycja zawierająca ten kod.",
-  "przyrostekNowejNazwy": " 2"
+  "przyrostekNowejNazwy": " 2",
+  "adresBrakuUprawnien": "InvalidPermissions",
+  "komunikatBrakuUprawnien": "You don't have permissions to view this screen."
 }
