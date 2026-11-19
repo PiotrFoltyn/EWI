@@ -8,7 +8,7 @@
     "status": "Zlikwidowana"
   },
   "komunikatWyslania": "Zgłoszenie zostało wysłane.",
-  "komunikatWymaganegoPola": "This field is required.",
-  "poleZmianyNazwy": "Nazwa",
-  "typJednostkiJt": "Jednostka techniczna"
+  "typJednostkiJt": "Jednostka techniczna",
+  "komunikatBrakuUzasadnienia": "Podaj uzasadnienie zgłoszenia.",
+  "poleZmianyNazwyKrotkiej": "Nazwa skrócona"
 }

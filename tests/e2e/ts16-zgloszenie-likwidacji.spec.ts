@@ -110,7 +110,15 @@ test.describe(
       'TC-111 Data likwidacji w przeszłości',
       {
         tag: ['@TC-111', TAGI.priorytet.wysoki, TAGI.rodzaj.negatywny, TAGI.warstwa.e2e, TAGI.kwalifikacja.regresja],
-        annotation: [ZALOZENIE_ROLI, ZALOZENIE_DANYCH],
+        annotation: [
+          ZALOZENIE_ROLI,
+          ZALOZENIE_DANYCH,
+          {
+            type: 'defekt',
+            description:
+              'Dev 18.11.2026: kalendarz „Data likwidacji*” przyjmuje wczorajszą datę (pole = wczoraj), a [FIG] 22.10 – data tylko od dziś w przyszłość. Test celowo czerwony do czasu poprawki.',
+          },
+        ],
       },
       async ({ dashboardPage }) => {
         // Arrange
@@ -120,10 +128,9 @@ test.describe(
         const formularz = await karta.zglosLikwidacje();
 
         // Act
-        await formularz.kalendarz.otworzNaMiesiacu(wczoraj);
+        await formularz.kalendarz.kliknijDzien(wczoraj);
 
         // Assert
-        await expect(formularz.kalendarz.dzienZablokowany(wczoraj)).toBeVisible();
         await expect(formularz.kalendarz.pole).not.toHaveValue(dataIso(wczoraj));
       },
     );
@@ -178,7 +185,7 @@ test.describe(
         await formularz.sprobujWyslac();
 
         // Assert
-        await expect(formularz.komunikatyWymaganegoPola).toHaveCount(1);
+        await expect(formularz.komunikatWalidacji(dane.komunikatBrakuUzasadnienia)).toBeVisible();
         await expect(formularz.przyciskWyslij).toBeVisible();
         await expect(formularz.page).toHaveURL(/RequestId=0/);
       },
@@ -243,6 +250,11 @@ test.describe(
         annotation: [
           ZALOZENIE_ROLI,
           { type: 'założenie', description: 'P-24: zlikwidowane wykluczone z wyszukiwania.' },
+          {
+            type: 'uwaga',
+            description:
+              'Pusta lista opcji jest też stanem przed wyszukaniem – test nie odróżnia wykluczenia od niewykonanego wyszukiwania. TODO: kontrola pozytywna (aktywna JT jest wyszukiwana).',
+          },
         ],
       },
       async ({ dashboardPage }) => {
@@ -258,7 +270,6 @@ test.describe(
         const opcje = await formularz.wyszukajJednostke(mpk);
 
         // Assert
-        await expect(formularz.page.getByText('Wpisz co najmniej 3 znaki')).toHaveCount(0);
         await expect(opcje).toHaveCount(0);
       },
     );

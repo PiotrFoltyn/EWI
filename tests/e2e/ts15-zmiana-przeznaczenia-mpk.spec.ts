@@ -138,9 +138,7 @@ test.describe(
 
         // Assert
         await expect(podglad.status(StatusZgloszenia.Zarejestrowane)).toBeVisible();
-        await expect(
-          podglad.wierszZmiany(dane.poleZmianyNazwy).filter({ hasText: zgloszenie.nazwaKrotka }),
-        ).toHaveCount(1);
+        await expect(podglad.wierszZmiany(dane.poleZmianyNazwyKrotkiej, zgloszenie.nazwaKrotka)).toBeVisible();
       },
     );
 

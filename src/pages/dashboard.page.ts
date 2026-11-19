@@ -45,6 +45,8 @@ export class DashboardPage extends BasePage {
    * @returns załadowany formularz zgłoszenia
    */
   async otworzNoweZgloszenieJt(): Promise<ZgloszeniePage> {
+    // Kafelek jest tylko na dashboardzie – test mógł wcześniej przejść na inny ekran.
+    await this.goto();
     await this.przyciskNoweZgloszenieJt.click();
     const formularz = new ZgloszeniePage(this.page);
     await formularz.expectLoaded();

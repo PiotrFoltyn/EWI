@@ -8,6 +8,6 @@
     "status": "Zlikwidowana"
   },
   "komunikatWyslania": "Zgłoszenie zostało wysłane.",
-  "komunikatWymaganegoPola": "This field is required.",
-  "poleZmianyNazwy": "Nazwa"
+  "komunikatBrakuUzasadnienia": "Podaj uzasadnienie zgłoszenia.",
+  "poleZmianyNazwyKrotkiej": "Nazwa skrócona"
 }

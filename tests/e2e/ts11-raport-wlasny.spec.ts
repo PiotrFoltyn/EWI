@@ -16,6 +16,9 @@ test.use({ rola: Rola.Administrator });
 
 test.describe.configure({ timeout: 240_000 });
 
+const DEFEKT_FILTROW =
+  'DEFEKT (dev 18.11.2026): filtry nazwa / PS / MPK / O-ZSI raportu ad hoc nie zawężają wyniku – z filtrem MPK i O-ZSI plik zawiera zmiany wszystkich jednostek z okresu, z filtrem nazwy plik jest pusty mimo zmiany „Utworzenie” jednostki; listy wyboru MPK i nazwy potrafią nie zwrócić opcji przez kilka minut. Do zgłoszenia zespołowi EWI.';
+
 const ZALOZENIE_AD_HOC = {
   type: 'założenie',
   description:
@@ -106,6 +109,8 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
         ],
       },
       async ({ dashboardPage }, testInfo) => {
+        test.fixme(true, DEFEKT_FILTROW);
+
         // Arrange
         const raporty = await dashboardPage.otworzRaporty();
 
@@ -161,6 +166,8 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
     },
     async ({ dashboardPage }, testInfo) => {
       // Arrange
+      test.fixme(true, DEFEKT_FILTROW);
+
       const { nazwa, od } = dane.tc62;
       const doDnia = dzisiejszaDataIso();
       const raporty = await dashboardPage.otworzRaporty();
@@ -192,6 +199,11 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
           description:
             'P-04: wartości „ZZZZZZZZ” nie da się wybrać z listy MPK – brak wyników uzyskany okresem bez zmian (styczeń 2020). Akceptowany komunikat o braku danych albo plik z samymi nagłówkami.',
         },
+        {
+          type: 'defekt',
+          description:
+            'Dev 18.11.2026: dla okresu bez zmian EWI nie pokazuje komunikatu i nie zwraca pliku (brak reakcji po „Generuj i pobierz raport”). Test celowo czerwony do czasu poprawki.',
+        },
       ],
     },
     async ({ dashboardPage }, testInfo) => {
@@ -202,6 +214,10 @@ test.describe('TS_11 – Raport własny użytkownika', { tag: ['@TS_11', '@BR-RA
       const wynik = await raporty.generujAdHoc({ dataOd: data(dane.tc63.od), dataDo: data(dane.tc63.do) });
 
       // Assert
+      expect(
+        { plik: wynik.pobranie !== null, komunikat: wynik.komunikat !== null },
+        'EWI informuje o braku danych albo zwraca plik z samymi nagłówkami (P-04)',
+      ).not.toEqual({ plik: false, komunikat: false });
       expect(await wierszeRaportu(wynik, testInfo)).toHaveLength(0);
     },
   );

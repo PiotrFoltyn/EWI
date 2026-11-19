@@ -32,9 +32,12 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+  # Testy e2e tylko ręcznie (Run workflow): działają na współdzielonym dev i część z nich tworzy dane
+  # (zgłoszenia, pozycje słownika, generowanie plików) – nie mogą startować przy każdym pushu.
   test:
     name: Testy e2e
     needs: quality
+    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:

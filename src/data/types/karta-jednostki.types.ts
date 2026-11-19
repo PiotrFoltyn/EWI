@@ -25,11 +25,16 @@ export interface DaneTs05 {
 export interface DaneTs06 {
   /** Nagłówki kolumn tabeli historii wg makiety [FIG]. */
   kolumnyHistorii: string[];
-  /** TODO [ZAŁOŻENIE]: brak na dev jednostki z ≥ 2 zmianami – uzupełnić MPK po wykonaniu zmian (TS_13 / TS_22). */
-  tc27: { mpk: string; minimalnaLiczbaZmian: number };
-  /** TODO [ZAŁOŻENIE]: MPK jednostki zmienionej przez administratora z konta testowego (login – z `.env`, nie z JSON). */
-  tc28: { mpk: string };
-  tc29: { mpk: string };
+  /** Jednostka – z fixture `zrealizowanaZmianaJednostki` (wpis importu + zmiana z testu). */
+  tc27: { minimalnaLiczbaZmian: number };
+  /** Rodzaj zmiany wpisu po realizacji zgłoszenia zmiany (login autora – z `.env`, nie z JSON). */
+  tc28: { rodzajZmiany: string };
+  /**
+   * Jednostka zasilona migracją, bez zmian po zasileniu (tylko odczyt), i oczekiwany jedyny wpis historii:
+   * rodzaj zmiany oraz początek podstawy (po nim numer partii importu).
+   */
+  tc29: { mpk: string; rodzajZmiany: string; podstawa: string };
+  /** Jednostka z wpisami ze zrealizowanych zgłoszeń (tylko odczyt). */
   tc30: { mpk: string };
 }
 

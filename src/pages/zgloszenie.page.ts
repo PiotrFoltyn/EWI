@@ -37,8 +37,6 @@ export class ZgloszeniePage extends BasePage {
   readonly ewidencjaKosztowTak: Locator;
   readonly ewidencjaKosztowNie: Locator;
   readonly przyciskWyslij: Locator;
-  /** Komunikaty walidacji pól obowiązkowych. */
-  readonly komunikatyWymaganegoPola: Locator;
 
   /**
    * @param page - strona z otwartym formularzem zgłoszenia
@@ -57,30 +55,39 @@ export class ZgloszeniePage extends BasePage {
     this.ewidencjaKosztowTak = main.getByRole('radio', { name: 'Tak' });
     this.ewidencjaKosztowNie = main.getByRole('radio', { name: 'Nie' });
     this.przyciskWyslij = main.getByRole('button', { name: 'Wyślij zgłoszenie' });
-    // Komunikat walidacji OutSystems (tekst angielski platformy, jak w formularzu słownika).
-    this.komunikatyWymaganegoPola = main.getByText('This field is required.');
+  }
+
+  /**
+   * Komunikat walidacji pola (np. „Podaj uzasadnienie zgłoszenia.”) – treść z danych testu.
+   * @param tresc - treść komunikatu
+   * @returns lokator komunikatu
+   */
+  komunikatWalidacji(tresc: string): Locator {
+    return this.page.getByRole('main').getByText(tresc, { exact: true });
   }
 
   /** Formularz jest gotowy po przejściu ekranu i wczytaniu listy rodzajów zgłoszenia. */
   override async expectLoaded(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/Request\?/);
+    // Nowe zgłoszenie z dashboardu: `/Request`; z karty jednostki: `/Request?RequestId=0&…`.
+    await expect(this.page).toHaveURL(/\/Request(\?|$)/);
     await this.poPrzejsciuEkranu();
     await expect(this.rodzajZgloszenia).toBeVisible();
     await expect(this.przyciskWyslij).toBeVisible();
   }
 
   /**
-   * Kontener pola zmiany (etykieta + pole wyboru + „Nowa wartość”).
-   * Najgłębszy div z etykietą i polem wyboru = ostatni pasujący w kolejności dokumentu.
+   * Najgłębszy kontener z etykietą pola zmiany i podanym elementem (ostatni pasujący div w kolejności dokumentu).
+   * Pole wyboru i „Nowa wartość*” są w różnych kontenerach, więc każdy szukany jest osobno.
    * @param pole - pole z `PoleZmiany`
+   * @param element - element, który ma być w kontenerze
    * @returns lokator kontenera
    */
-  private kontenerPola(pole: PoleZmiany): Locator {
+  private kontenerPola(pole: PoleZmiany, element: Locator): Locator {
     return this.page
       .getByRole('main')
       .locator('div')
       .filter({ has: this.page.getByText(pole, { exact: true }) })
-      .filter({ has: this.page.getByRole('checkbox') })
+      .filter({ has: element })
       .last();
   }
 
@@ -90,9 +97,9 @@ export class ZgloszeniePage extends BasePage {
    * @param nowaWartosc - nowa wartość pola
    */
   async zmien(pole: PoleZmiany, nowaWartosc: string): Promise<void> {
-    const kontener = this.kontenerPola(pole);
-    await kontener.getByRole('checkbox').check();
-    const nowa = kontener.getByRole('textbox', { name: 'Nowa wartość*' });
+    await this.kontenerPola(pole, this.page.getByRole('checkbox')).getByRole('checkbox').check();
+    const poleNowejWartosci = this.page.getByRole('textbox', { name: 'Nowa wartość*' });
+    const nowa = this.kontenerPola(pole, poleNowejWartosci).getByRole('textbox', { name: 'Nowa wartość*' });
     await expect(nowa).toBeEditable();
     await nowa.fill(nowaWartosc);
   }
@@ -112,16 +119,17 @@ export class ZgloszeniePage extends BasePage {
   }
 
   /**
-   * Wpisuje uzasadnienie i wysyła zgłoszenie; czeka na podgląd zapisanego zgłoszenia.
+   * Wpisuje uzasadnienie i wysyła zgłoszenie; czeka, aż aplikacja zapisze zgłoszenie (numer w adresie).
    * @param uzasadnienie - uzasadnienie zgłoszenia (pole obowiązkowe)
-   * @returns podgląd wysłanego zgłoszenia
+   * @returns podgląd wysłanego zgłoszenia (dane wczytują się asynchronicznie – asercje web-first na nie czekają)
    */
   async wyslij(uzasadnienie: string): Promise<PodgladZgloszeniaPage> {
     await this.uzasadnienie.fill(uzasadnienie);
     await this.przyciskWyslij.click();
-    const podglad = new PodgladZgloszeniaPage(this.page);
-    await podglad.expectLoaded();
-    return podglad;
+    // Numer w adresie = zgłoszenie zapisane. Bez pełnego `expectLoaded` – test ma od razu zarejestrować adres do
+    // sprzątania (`zgloszeniaDoWycofania`), zanim jakakolwiek asercja podglądu mogłaby przerwać test.
+    await expect(this.page).toHaveURL(/RequestId=[1-9]d*/);
+    return new PodgladZgloszeniaPage(this.page);
   }
 
   /** Próbuje wysłać formularz w obecnym stanie (bez czekania na podgląd) – do testów walidacji. */

@@ -1,16 +1,17 @@
 {
   "kolumnyHistorii": ["Data zmiany", "Data obowiązywania", "Rodzaj zmiany", "Podstawa / zgłoszenie", "Wprowadził(a)"],
   "tc27": {
-    "mpk": "",
     "minimalnaLiczbaZmian": 2
   },
   "tc28": {
-    "mpk": ""
+    "rodzajZmiany": "Zmiana danych"
   },
   "tc29": {
-    "mpk": "A1710P03"
+    "mpk": "A1710P03",
+    "rodzajZmiany": "Utworzenie",
+    "podstawa": "Import – partia"
   },
   "tc30": {
-    "mpk": "Y2D10000"
+    "mpk": "Y6170000"
   }
 }

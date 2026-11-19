@@ -7,9 +7,10 @@ export interface DaneZgloszen {
   /** Filtry Rejestru dla zlikwidowanej jednostki technicznej. */
   filtryZlikwidowanejJt: UstawieniaFiltrow;
   komunikatWyslania: string;
-  komunikatWymaganegoPola: string;
-  /** Pole w tabeli „Zmiany do wprowadzenia” dla zmiany nazwy. */
-  poleZmianyNazwy: string;
+  /** Komunikat walidacji pustego „Uzasadnienie zgłoszenia*”. */
+  komunikatBrakuUzasadnienia: string;
+  /** Pole w sekcji „Zmiany do wprowadzenia” dla zmiany nazwy krótkiej. */
+  poleZmianyNazwyKrotkiej: string;
 }
 
 /** Dane stałe TS_14 – zgłoszenie zmiany KOC, SJO i Pionu (role „Zgłaszający KOC/SJO/Pion”). */

@@ -3,6 +3,9 @@ import { KalendarzComponent } from '../components/kalendarz.component';
 import { escapujRegex } from '../utils/wzorce';
 import { BasePage } from './base.page';
 
+/** Maksymalny czas oczekiwania na plik lub komunikat po „Generuj i pobierz raport”. */
+const CZAS_ODPOWIEDZI_AD_HOC = 60_000;
+
 /** Pliki dla odbiorców (raporty standardowe) – tekst kolumny „Raport” dokładnie jak w aplikacji. */
 export enum RaportStandardowy {
   Temat5013 = 'Temat 5013 – pełny wykaz jednostek',
@@ -166,8 +169,9 @@ export class RaportyPage extends BasePage {
   /**
    * Ustawia filtry i daty raportu ad hoc i uruchamia „Generuj i pobierz raport”.
    * Zwraca plik albo – gdy aplikacja zamiast pliku pokaże komunikat (np. brak danych) – treść komunikatu.
+   * Gdy w `CZAS_ODPOWIEDZI_AD_HOC` nie ma ani pliku, ani komunikatu, zwraca oba pola `null` (test rozstrzyga, czy to błąd).
    * @param ustawienia - daty obowiązywania i filtry
-   * @returns pobrany plik lub komunikat
+   * @returns pobrany plik, komunikat albo brak odpowiedzi aplikacji
    */
   async generujAdHoc(ustawienia: UstawieniaRaportuAdHoc): Promise<WynikRaportuAdHoc> {
     for (const [filtr, wartosc] of Object.entries(ustawienia.filtry ?? {}) as [FiltrAdHoc, string][]) {
@@ -176,22 +180,22 @@ export class RaportyPage extends BasePage {
     await this.kalendarz(0).ustaw(ustawienia.dataOd);
     await this.kalendarz(1).ustaw(ustawienia.dataDo);
     await expect(this.przyciskGenerujAdHoc).toBeEnabled();
-    const pobranie = this.page.waitForEvent('download', { timeout: 120_000 });
+    const pobranie = this.page.waitForEvent('download', { timeout: CZAS_ODPOWIEDZI_AD_HOC });
     await this.przyciskGenerujAdHoc.click();
-    // Przegrany z wyścigu nie może później odrzucić testu – jego błąd zamieniamy na obietnicę, która się nie rozstrzyga.
-    const nigdy = new Promise<never>(() => undefined);
+    const brakOdpowiedzi: WynikRaportuAdHoc = { pobranie: null, komunikat: null };
     return Promise.race([
-      pobranie.then((plik): WynikRaportuAdHoc => ({ pobranie: plik, komunikat: null })).catch(() => nigdy),
+      pobranie.then((plik): WynikRaportuAdHoc => ({ pobranie: plik, komunikat: null })).catch(() => brakOdpowiedzi),
       this.komunikat
         .first()
-        .waitFor({ timeout: 120_000 })
+        .waitFor({ timeout: CZAS_ODPOWIEDZI_AD_HOC })
         .then(
           async (): Promise<WynikRaportuAdHoc> => ({
             pobranie: null,
             komunikat: await this.komunikat.first().innerText(),
           }),
         )
-        .catch(() => nigdy),
+        // Brak komunikatu nie rozstrzyga wyścigu – rozstrzyga go pobranie (plik albo jego limit czasu).
+        .catch(() => new Promise<never>(() => undefined)),
     ]);
   }
 }

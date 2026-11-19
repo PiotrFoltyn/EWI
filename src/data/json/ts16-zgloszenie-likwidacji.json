@@ -8,7 +8,7 @@
     "status": "Zlikwidowana"
   },
   "komunikatWyslania": "Zgłoszenie zostało wysłane.",
-  "komunikatWymaganegoPola": "This field is required.",
-  "poleZmianyNazwy": "Nazwa",
-  "dniDoLikwidacji": 30
+  "dniDoLikwidacji": 30,
+  "komunikatBrakuUzasadnienia": "Podaj uzasadnienie zgłoszenia.",
+  "poleZmianyNazwyKrotkiej": "Nazwa skrócona"
 }

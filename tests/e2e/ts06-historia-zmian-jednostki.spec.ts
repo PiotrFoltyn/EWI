@@ -5,17 +5,19 @@ import { Rola } from '../../src/data/rola';
 import { TAGI } from '../../src/data/tagi';
 import type { DaneTs06 } from '../../src/data/types/karta-jednostki.types';
 import { KolumnaHistorii } from '../../src/pages/karta-jednostki.page';
-import { znacznikCzasuDatyZmiany } from '../../src/utils/wzorce';
+import { escapujRegex, znacznikCzasuDatyZmiany } from '../../src/utils/wzorce';
 
 const dane: DaneTs06 = ts06Dane;
 
 // Rola jest opcją workera (logowanie raz na worker), dlatego ustawiana na poziomie pliku – jeden plik = jeden scenariusz.
-// TC-30 wymaga Administratora; TC-27 – TC-29 są dla „Użytkownika podstawowego”.
-// TODO [ZAŁOŻENIE]: TC-27 – TC-29 przenieść na Rola.UzytkownikPodstawowy po założeniu konta (osobny kontekst lub plik).
+// TC-27, TC-28 (realizacja zgłoszenia w fixture) i TC-30 wymagają Administratora; TC-27 – TC-29 są dla „Użytkownika podstawowego”.
+// TODO [ZAŁOŻENIE]: odczyt historii w TC-27 – TC-29 przenieść na Rola.UzytkownikPodstawowy po założeniu konta
+// (osobny kontekst z sesją tej roli; zmianę nadal przeprowadza Administrator).
 test.use({ rola: Rola.Administrator });
 
-const BRAK_DANYCH_ZMIAN =
-  'Brak danych: po imporcie 13.11.2026 (partia 72) każda jednostka ma tylko wpis „Utworzenie / Import” – potrzebna jednostka zmieniona zgłoszeniami (TS_13 / TS_22); uzupełnij MPK w ts06-historia-zmian-jednostki.json.';
+// Jeden worker, testy po kolei: TC-27 i TC-28 odczytują tę samą zmianę z fixture workera
+// `zrealizowanaZmianaJednostki` (jedna zmieniona jednostka na przebieg, bez wyścigu o wolną jednostkę).
+test.describe.configure({ mode: 'default' });
 
 test.describe(
   'TS_06 – Historia zmian jednostki',
@@ -33,17 +35,22 @@ test.describe(
       {
         tag: ['@TC-27', TAGI.priorytet.wysoki, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e, TAGI.kwalifikacja.regresja],
         annotation: [
-          { type: 'założenie', description: 'P-07: wpisy uporządkowane od najnowszego.' },
+          { type: 'uwaga', description: 'P-07 (potwierdzone 18.11.2026): wpisy uporządkowane od najnowszego.' },
+          {
+            type: 'założenie',
+            description:
+              'Zmiany różnych osób: wpis „Utworzenie / Import” z migracji (P-08 – import tworzy wpis; autor importu, dev 13.11.2026) + zmiana zrealizowana w teście przez Administratora.',
+          },
           {
             type: 'uwaga',
             description: 'K-08 / KO 18.2: wartości poprzedniej i nowej nie ma w makiecie – nie sprawdzane.',
           },
         ],
       },
-      async ({ dashboardPage }) => {
+      async ({ dashboardPage, zrealizowanaZmianaJednostki }) => {
         // Arrange
-        const { mpk, minimalnaLiczbaZmian } = dane.tc27;
-        test.fixme(!mpk, BRAK_DANYCH_ZMIAN);
+        const { minimalnaLiczbaZmian } = dane.tc27;
+        const { mpk } = zrealizowanaZmianaJednostki;
         const rejestr = await dashboardPage.otworzRejestrJednostek();
 
         // Act
@@ -75,18 +82,20 @@ test.describe(
           '@KO-18.6',
         ],
         annotation: [
-          { type: 'założenie', description: 'P-07: ostatnia zmiana jest pierwszym wpisem historii.' },
+          {
+            type: 'uwaga',
+            description: 'P-07 (potwierdzone 18.11.2026): ostatnia zmiana jest pierwszym wpisem historii.',
+          },
           {
             type: 'założenie',
             description:
-              'Zmianę wykonał testowy Administrator (konto z .env); „Wprowadził(a)” pokazuje login w tej samej postaci co przy logowaniu.',
+              'Zmianę realizuje w teście testowy Administrator (konto z .env); „Wprowadził(a)” pokazuje login w tej samej postaci co przy logowaniu.',
           },
         ],
       },
-      async ({ dashboardPage }) => {
+      async ({ dashboardPage, zrealizowanaZmianaJednostki }) => {
         // Arrange
-        const { mpk } = dane.tc28;
-        test.fixme(!mpk, BRAK_DANYCH_ZMIAN);
+        const { mpk } = zrealizowanaZmianaJednostki;
         const loginAutora = pobierzKonto(Rola.Administrator).login;
         const rejestr = await dashboardPage.otworzRejestrJednostek();
 
@@ -94,38 +103,42 @@ test.describe(
         const karta = await rejestr.otworzKarteJednostki(mpk);
 
         // Assert
+        await expect(karta.kolumnaHistorii(KolumnaHistorii.RodzajZmiany).first()).toHaveText(dane.tc28.rodzajZmiany);
         await expect(karta.kolumnaHistorii(KolumnaHistorii.Wprowadzil).first()).toHaveText(loginAutora);
       },
     );
 
     test(
-      'TC-29 Jednostka bez historii zmian',
+      'TC-29 Jednostka bez zmian po migracji – tylko wpis importu',
       {
         tag: ['@TC-29', TAGI.priorytet.niski, TAGI.rodzaj.pozytywny, TAGI.warstwa.e2e],
-        annotation: {
-          type: 'założenie',
-          description:
-            'P-08: zasilenie migracją nie tworzy wpisu w historii; treść komunikatu o braku historii nieznana.',
-        },
+        annotation: [
+          {
+            type: 'uwaga',
+            description:
+              'P-08 (potwierdzone 19.11.2026): zasilenie migracją tworzy jeden wpis „Utworzenie / Import – partia N”; ponowny import tej samej jednostki nie dodaje kolejnego wpisu.',
+          },
+          {
+            type: 'założenie',
+            description:
+              'Jednostka zasilona migracją (partia 72, dev 13.11.2026), bez zmian po zasileniu. Ponownego importu test nie wykonuje (TS_12) – sprawdza stan po importach przeprowadzonych na dev.',
+          },
+        ],
       },
       async ({ dashboardPage }) => {
-        // Na dev (13.11.2026) migracja tworzy wpis „Utworzenie / Import – partia 72 / oskarherczyk”.
-        test.fixme(
-          true,
-          'P-08: migracja tworzy wpis „Utworzenie / Import” w historii – sprzeczne z przyjętą odpowiedzią „Nie”; czeka na decyzję analityka i treść komunikatu.',
-        );
-
         // Arrange
-        const { mpk } = dane.tc29;
+        const { mpk, rodzajZmiany, podstawa } = dane.tc29;
         const rejestr = await dashboardPage.otworzRejestrJednostek();
 
         // Act
         const karta = await rejestr.otworzKarteJednostki(mpk);
 
         // Assert
-        // TODO [ZAŁOŻENIE]: dodać asercję komunikatu o braku historii po ustaleniu treści (P-08) i sprawdzić,
-        // czy komunikat nie jest wierszem tabeli (wtedy `wierszeHistorii` trzeba zawęzić).
-        await expect(karta.wierszeHistorii).toHaveCount(0);
+        await expect(karta.wierszeHistorii, 'jeden wpis mimo ponownego importu').toHaveCount(1);
+        await expect(karta.kolumnaHistorii(KolumnaHistorii.RodzajZmiany)).toHaveText([rodzajZmiany]);
+        await expect(karta.kolumnaHistorii(KolumnaHistorii.Podstawa)).toHaveText([
+          new RegExp(`^${escapujRegex(podstawa)} \\d+$`),
+        ]);
       },
     );
 
@@ -143,7 +156,7 @@ test.describe(
         annotation: {
           type: 'założenie',
           description:
-            'Jednostka z wpisem „Utworzenie / Import” (stan dev 13.11.2026). Próba edycji = dwuklik w komórkę, wpisanie tekstu, Delete.',
+            'Jednostka z wpisem importu i wpisami „Zmiana danych” ze zrealizowanych zgłoszeń (dev 18–19.11.2026). Próba edycji = dwuklik w komórkę, wpisanie tekstu, Delete.',
         },
       },
       async ({ dashboardPage }) => {
